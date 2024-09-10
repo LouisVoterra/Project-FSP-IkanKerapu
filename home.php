@@ -113,8 +113,8 @@ if ($result->num_rows > 0) {
                 <td>" . $row["name"] . "</td>
                 <td>" . $row["date"] . "</td> 
                 <td>" . $row["description"] . "</td>   
-                <td><a href='updateachievement.php?idevent=" . $row["idevent"] . "'>Edit</a></td>
-                <td><a href='deleteachievement.php?idevent=" . $row["idevent"] . "'>Delete</a></td>
+                <td><a href='updateachievement.php?idevent=" . $row["idachievement"] . "'>Edit</a></td>
+                <td><a href='deleteachievement.php?idevent=" . $row["idachievement"] . "'>Delete</a></td>
               </tr>";
     }
     echo "</table>";
