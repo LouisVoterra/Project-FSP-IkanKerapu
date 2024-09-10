@@ -101,26 +101,26 @@ if ($result->num_rows > 0) {
     echo "<br><table border='1'>
             <tr>
                 <th>ID</th>
-                <th>Nama</th>
-                <th>Deskripsi</th>
+                <th>Name</th>
                 <th>Date</th>
+                <th>Description</th>
                 <th></th>
                 <th></th>
             </tr>";
     while($row = $result->fetch_assoc()) {
         echo "<tr>
-                <td>" . $row["idevent"] . "</td>
+                <td>" . $row["idachievement"] . "</td>
                 <td>" . $row["name"] . "</td>
-                <td>" . $row["description"] . "</td> 
-                <td>" . $row["date"] . "</td>   
-                <td><a href='updateevent.php?idevent=" . $row["idevent"] . "'>Edit</a></td>
-                <td><a href='deleteevent.php?idevent=" . $row["idevent"] . "'>Delete</a></td>
+                <td>" . $row["date"] . "</td> 
+                <td>" . $row["description"] . "</td>   
+                <td><a href='updateachievement.php?idevent=" . $row["idevent"] . "'>Edit</a></td>
+                <td><a href='deleteachievement.php?idevent=" . $row["idevent"] . "'>Delete</a></td>
               </tr>";
     }
     echo "</table>";
 } 
 
-echo "<br><a href='insertevent.php'><button style='margin-bottom: 20px;'>INSERT</button></a>";
+echo "<br><a href='insertachievement.php'><button style='margin-bottom: 20px;'>INSERT</button></a>";
 
 $conn->close();
 
