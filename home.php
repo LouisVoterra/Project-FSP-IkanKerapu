@@ -94,7 +94,9 @@ if ($result->num_rows > 0) {
 
 echo "<br><a href='insertevent.php'><button style='margin-bottom: 20px;'>INSERT</button></a>";
 
-$sql = "SELECT * FROM achievement";
+$sql = " SELECT t.name AS team_name, a.idachievement, a.name AS achievement_name, a.date ,a.description
+		FROM team t
+        JOIN achievement a ON t.idteam = a.idteam";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -109,12 +111,12 @@ if ($result->num_rows > 0) {
             </tr>";
     while($row = $result->fetch_assoc()) {
         echo "<tr>
-                <td>" . $row["idachievement"] . "</td>
-                <td>" . $row["name"] . "</td>
-                <td>" . $row["date"] . "</td> 
+                <td>" . $row["team_name"] . "</td>
+                <td>" . htmlspecialchars($row["achievement_name"]) . "</td>
+                <td>" . htmlspecialchars($row["date"]) . "</td> 
                 <td>" . $row["description"] . "</td>   
-                <td><a href='updateachievement.php?idevent=" . $row["idachievement"] . "'>Edit</a></td>
-                <td><a href='deleteachievement.php?idevent=" . $row["idachievement"] . "'>Delete</a></td>
+                <td><a href='updateachievement.php?idachievement=" . $row["idachievement"] . "'>Edit</a></td>
+                <td><a href='deleteachievement.php?idachievement=" . $row["idachievement"] . "'>Delete</a></td>
               </tr>";
     }
     echo "</table>";

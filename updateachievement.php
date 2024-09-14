@@ -28,6 +28,8 @@ if (isset($_GET['idachievement']) && !empty($_GET['idachievement'])) {
 }
 ?>
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,10 +41,10 @@ if (isset($_GET['idachievement']) && !empty($_GET['idachievement'])) {
 
 <h2>Edit Achievement</h2>
 
-<form action="updateteam_proses.php" method="POST">
+<form action="updateachievement_proses.php" method="POST">
     <input type="hidden" name="idachievement" value="<?php echo htmlspecialchars($team['idachievement']); ?>">
     
-    <label for="name">Nama Team:</label>
+    <label for="name">Nama Achievement:</label>
     <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($team['name']); ?>" required>
     <br><br>
     
