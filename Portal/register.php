@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>Login</title>
+    </head>
+    <link rel = "stylesheet" href="style.css">
+    <body class="login">
+        <div class='wrapper'> 
+            <form action="register_process.php" method="post">
+                
+                <h1>Login</h1>
+
+                <div class = "input-box">
+                    <label>first name:</label>
+                    <input type="text" name="fname" placeholder="First Name" require><br><br>
+                </div>
+
+                <div class = "input-box">
+                    <label>last name:</label>
+                    <input type="text" name="lname" placeholder="Last Name" require><br><br>
+                </div>
+
+                <div class = "input-box">
+                    <label>username:</label>
+                    <input type="text" name="username" placeholder="Username" require><br><br>
+                </div>
+                
+                <div class = "input-box">
+                    <label>password</label>
+                    <input type="password" name="password" placeholder="Password" require><br><br>
+                </div>
+
+
+                <button type="submit" name="btnLogin">Login</button>
+
+                <div class="register-box">
+                    <p>dont have account <a href="#">Register</a></p>
+                <div>
+
+            </form>
+        </div>
+    </body>
+<html>

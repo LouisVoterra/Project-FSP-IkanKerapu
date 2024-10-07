@@ -1,26 +1,25 @@
 <?php
-include 'db.php';
+require_once 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $idevent = $_POST['idevent'];
     $name = $_POST['name'];
     $date = date('Y-m-d', strtotime($_POST['date']));
     $description = $_POST['description'];
 
-    $sql = "UPDATE event SET name = ?,date = ?, description = ? WHERE idevent = ?";
+    $sql = "INSERT INTO event (name, date , description) VALUES (?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
 
-    $stmt = $conn->prepare($sql);
     if ($stmt === false) {
         die("Error preparing statement: " . $conn->error);
     }
 
-    $stmt->bind_param("sssi",$name, $date , $description, $idevent);
+    $stmt->bind_param("sss", $name, $date, $description);
 
     if ($stmt->execute()) {
-        echo "Data berhasil diperbarui.";
-        echo "<br><a href='home.php'>Kembali ke daftar event</a>";
+        echo "Data berhasil ditambahkan.";
+        echo "<br><a href='insertevent.php'>Tambah event lagi</a>";
+        echo "<br><a href='kelolaevent.php'>Daftar event</a>";
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -28,6 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
     $conn->close();
 } else {
-    echo "Data tidak terkirim.";
+    echo "Form belum disubmit.";
 }
 ?>

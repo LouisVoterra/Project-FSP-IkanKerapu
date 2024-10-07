@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+require_once 'db.php';
 
 if (isset($_GET['idteam']) && !empty($_GET['idteam'])) {
     $idteam = intval($_GET['idteam']); 
@@ -65,7 +65,7 @@ if (isset($_GET['idteam']) && !empty($_GET['idteam'])) {
     <input type="submit" value="Update Team">
 </form>
 
-<a href="home.php">Kembali ke Home</a>
+<a href="kelolateam.php">Kembali ke daftar team</a>
 
 <?php
 

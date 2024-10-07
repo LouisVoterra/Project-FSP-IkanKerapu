@@ -1,26 +1,26 @@
 <?php
-include 'db.php';
+require_once 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $idevent = $_POST['idachievement'];
+    $idteam = $_POST['idteam'];
     $name = $_POST['name'];
     $date = date('Y-m-d', strtotime($_POST['date']));
     $description = $_POST['description'];
 
-    $sql = "UPDATE achievement SET name = ?,date = ?, description = ? WHERE idachievement = ?";
+    $sql = "INSERT INTO achievement (idteam , name, date , description) VALUES (?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
 
-    $stmt = $conn->prepare($sql);
     if ($stmt === false) {
         die("Error preparing statement: " . $conn->error);
     }
 
-    $stmt->bind_param("sssi",$name, $date , $description, $idevent);
+    $stmt->bind_param("isss",$idteam, $name, $date, $description);
 
     if ($stmt->execute()) {
-        echo "Data berhasil diperbarui.";
-        echo "<br><a href='home.php'>Kembali ke daftar event</a>";
+        echo "Data berhasil ditambahkan.";
+        echo "<br><a href='insertachievement.php'>Tambah event lagi</a>";
+        echo "<br><a href='kelolaachievment.php'>Home</a>";
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -28,6 +28,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
     $conn->close();
 } else {
-    echo "Data tidak terkirim.";
+    echo "Form belum disubmit.";
 }
 ?>

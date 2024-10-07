@@ -1,13 +1,11 @@
 <?php
-include 'db.php';
+require_once 'db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $idteam = $_POST['idteam'];
     $name = $_POST['name'];
-    $date = date('Y-m-d', strtotime($_POST['date']));
     $description = $_POST['description'];
 
-    $sql = "INSERT INTO achievement (idteam , name, date , description) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO game (name, description) VALUES (?, ?)";
 
     $stmt = $conn->prepare($sql);
 
@@ -15,12 +13,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Error preparing statement: " . $conn->error);
     }
 
-    $stmt->bind_param("isss",$idteam, $name, $date, $description);
+    $stmt->bind_param("ss", $name, $description);
 
     if ($stmt->execute()) {
         echo "Data berhasil ditambahkan.";
-        echo "<br><a href='insertachievement.php'>Tambah event lagi</a>";
-        echo "<br><a href='home.php'>Home</a>";
+        echo "<br><a href='insertgame.php'>Tambah game lagi</a>";
+        echo "<br><a href='kelolagame.php'>daftar game</a>";
     } else {
         echo "Error: " . $stmt->error;
     }

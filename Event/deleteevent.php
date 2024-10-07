@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+require_once 'db.php';
 
 if (isset($_GET['idevent']) && !empty($_GET['idevent'])) {
     $idteam = intval($_GET['idevent']); 
@@ -24,6 +24,6 @@ if (isset($_GET['idevent']) && !empty($_GET['idevent'])) {
 
 $conn->close();
 
-header("Location: home.php");
+header("Location: kelolaevent.php");
 exit();
 ?>

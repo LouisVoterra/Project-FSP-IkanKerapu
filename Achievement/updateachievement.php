@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+require_once 'db.php';
 
 if (isset($_GET['idachievement']) && !empty($_GET['idachievement'])) {
     $idachievement = intval($_GET['idachievement']); 
@@ -29,7 +29,6 @@ if (isset($_GET['idachievement']) && !empty($_GET['idachievement'])) {
 ?>
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,13 +41,21 @@ if (isset($_GET['idachievement']) && !empty($_GET['idachievement'])) {
 <h2>Edit Achievement</h2>
 
 <form action="updateachievement_proses.php" method="POST">
-    <input type="hidden" name="idachievement" value="<?php echo htmlspecialchars($team['idachievement']); ?>">
+    <input type="hidden" name="idachievement" value="<?php echo htmlspecialchars($team["idachievement"]); ?>">
     
     <label for="name">Nama Achievement:</label>
-    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($team['name']); ?>" required>
+    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($team["name"]); ?>" required>
+    <br><br>
+
+    <label for="name">Tanggal Achievement:</label>
+    <input type="date" name="date" value="<?php echo htmlspecialchars($team["date"]); ?>" required>
     <br><br>
     
-    <label for="idgame">Team:</label>
+    <label for="description">Deskripsi Achievement:</label>
+    <textarea id="description" name="description" required><?php echo htmlspecialchars($team["description"]); ?></textarea>
+    <br><br>
+    
+    <label for="idteam">Team:</label>
     <select id="idteam" name="idteam" required>
         <?php
 
@@ -64,7 +71,7 @@ if (isset($_GET['idachievement']) && !empty($_GET['idachievement'])) {
     </select>
     <br><br>
     
-    <input type="submit" value="Update Team">
+    <input type="submit" value="Update Achievement" name="submit">
 </form>
 
 <a href="home.php">Kembali ke Home</a>

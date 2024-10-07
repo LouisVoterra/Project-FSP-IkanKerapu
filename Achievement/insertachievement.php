@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+require_once 'db.php';
 
 $sql = "SELECT idteam, name FROM team";
 $result = $conn->query($sql);

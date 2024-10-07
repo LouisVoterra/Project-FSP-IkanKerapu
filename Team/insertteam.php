@@ -1,8 +1,10 @@
 <?php
-include 'db.php';
+require_once("../Class/teamclass.php");
+require_once("../Class/gameclass.php");
 
-$sql = "SELECT idgame, name FROM game";
-$result = $conn->query($sql);
+
+$team = new Game(); 
+$result = $team->getGame(''); // Kosongkan keyword untuk mendapatkan semua data
 
 ?>
 
@@ -36,13 +38,13 @@ $result = $conn->query($sql);
     </select>
     <br><br>
     
-    <input type="submit" value="Tambah Team">
+    <input type="submit" value="Tambah Team" name="submit">
 </form>
 
-<a href="home.php">Kembali ke Home</a>
+<a href="kelolateam.php">Kembali ke Daftar team</a>
 
 <?php
-$conn->close();
+// Tidak perlu $conn->close() karena koneksi ada di dalam class Team
 ?>
 
 </body>

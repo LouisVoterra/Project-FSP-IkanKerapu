@@ -1,12 +1,12 @@
 <?php
-include 'db.php';
+require_once 'db.php';
 
-if (isset($_GET['idgame'])) {
-    $idgame = $_GET['idgame'];
+if (isset($_GET['idachievement'])) {
+    $idachievement = $_GET['idachievement'];
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $sql = "DELETE FROM game WHERE idgame = ?";
+        $sql = "DELETE FROM achievement WHERE idachievement = ?";
         
 
         $stmt = $conn->prepare($sql);
@@ -14,11 +14,11 @@ if (isset($_GET['idgame'])) {
             die("Error preparing statement: " . $conn->error);
         }
 
-        $stmt->bind_param("i", $idgame);
+        $stmt->bind_param("i", $idachievement);
 
         if ($stmt->execute()) {
             echo "Data berhasil dihapus.";
-            echo "<br><a href='home.php'>Kembali ke daftar game</a>";
+            echo "<br><a href='kelolaachievment.php'>Kembali ke daftar achievment</a>";
         } else {
             echo "Error: " . $stmt->error;
         }
@@ -37,9 +37,9 @@ if (isset($_GET['idgame'])) {
         <body>
 
         <h2>Konfirmasi Penghapusan</h2>
-        <p>Apakah Anda yakin ingin menghapus game dengan ID <?php echo htmlspecialchars($idgame); ?>?</p>
+        <p>Apakah Anda yakin ingin menghapus game dengan ID <?php echo htmlspecialchars($idachievement); ?>?</p>
 
-        <form action="deletegame.php?idgame=<?php echo htmlspecialchars($idgame); ?>" method="POST">
+        <form action="deleteachievement.php?idachievement=<?php echo htmlspecialchars($idachievement); ?>" method="POST">
             <input type="submit" value="Hapus">
             <a href="home.php">Batal</a>
         </form>
@@ -49,6 +49,6 @@ if (isset($_GET['idgame'])) {
         <?php
     }
 } else {
-    echo "ID game tidak ditemukan.";
+    echo "ID achievement tidak ditemukan.";
 }
 ?>

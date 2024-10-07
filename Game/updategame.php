@@ -1,10 +1,10 @@
 <?php
-include 'db.php';
+require_once 'db.php';
 
-if (isset($_GET['idevent'])) {
-    $idgame = $_GET['idevent'];
+if (isset($_GET['idgame'])) {
+    $idgame = $_GET['idgame'];
 
-    $sql = "SELECT * FROM event WHERE idevent = ?";
+    $sql = "SELECT * FROM game WHERE idgame = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $idgame);
     $stmt->execute();
@@ -18,22 +18,19 @@ if (isset($_GET['idevent'])) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Update Event</title>
+            <title>Update Game</title>
         </head>
         <body>
 
-        <h2>Update Data Event</h2>
+        <h2>Update Data Game</h2>
 
-        <form action="updateevent_proses.php" method="POST">
-            <input type="hidden" name="idevent" value="<?php echo $row['idevent']; ?>">
+        <form action="updategame_proses.php" method="POST">
+            <input type="hidden" name="idgame" value="<?php echo $row['idgame']; ?>">
 
-            <label for="name">Nama Event:</label><br>
+            <label for="name">Nama Game:</label><br>
             <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($row['name']); ?>" required><br><br>
 
-            <label for="name">Tanggal Evemt:</label><br>
-            <input type="date" id="date" name="date" value="<?php echo htmlspecialchars($row['date']); ?>" required><br><br>
-
-            <label for="description">Deskripsi Event:</label><br>
+            <label for="description">Deskripsi Game:</label><br>
             <textarea id="description" name="description" required><?php echo htmlspecialchars($row['description']); ?></textarea><br><br>
 
             <input type="submit" value="Update">
@@ -43,12 +40,12 @@ if (isset($_GET['idevent'])) {
         </html>
         <?php
     } else {
-        echo "Evemt tidak ditemukan.";
+        echo "Game tidak ditemukan.";
     }
 
     $stmt->close();
 } else {
-    echo "ID event tidak ditemukan.";
+    echo "ID game tidak ditemukan.";
 }
 
 $conn->close();
