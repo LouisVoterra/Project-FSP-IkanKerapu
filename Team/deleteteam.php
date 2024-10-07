@@ -1,29 +1,27 @@
 <?php
-require_once 'db.php';
+require_once("../Class/teamclass.php");
 
-if (isset($_GET['idteam']) && !empty($_GET['idteam'])) {
+if (isset($_GET['idteam'])) {
     $idteam = intval($_GET['idteam']); 
+    $object = new Team();
 
-    $sql = "DELETE FROM team WHERE idteam = ?";
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        die("Error preparing statement: " . $conn->error);
-    }
-    $stmt->bind_param("i", $idteam);
+    // Create an associative array to pass to deleteTeam
+    $arr_col = ['idteam' => $idteam];
 
-    if ($stmt->execute()) {
-        echo "Team berhasil dihapus.";
+    // Call deleteTeam and check the result
+    if ($object->deleteTeam($arr_col)) {
+        // If deletion is successful, redirect
+        header("Location: kelolateam.php?status=success");
     } else {
-        echo "Error: " . $stmt->error;
+        // If deletion failed, you can set a status or error message
+        header("Location: kelolateam.php?status=error");
     }
-
-    $stmt->close();
 } else {
     echo "ID team tidak ditemukan.";
+    exit();
 }
 
-$conn->close();
-
-header("Location: kelolateam.php");
+// If you manage the connection outside the class, uncomment this
+// $conn->close();
 exit();
 ?>

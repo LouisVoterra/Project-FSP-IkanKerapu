@@ -42,5 +42,59 @@
             $stmt->execute();
             return $this->mysqli->insert_id;
         }
+
+        public function updateTeam($arr_col) {
+            $sql = "UPDATE team SET name = ?, idgame = ? WHERE idteam = ?";
+            $stmt = $this->mysqli->prepare($sql);
+            
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+        
+            $stmt->bind_param("sii", $arr_col['name'], $arr_col['idgame'], $arr_col['idteam']);
+        
+            $stmt->execute();
+        
+            if ($stmt->affected_rows > 0) {
+                return true; 
+            } else {
+                return false; 
+            }
+        }
+
+        public function getTeamById($id) {
+            $sql = "SELECT * FROM team WHERE idteam = ?";
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+            
+            $stmt->bind_param("i", $id);  
+            $stmt->execute();
+            
+            $result = $stmt->get_result(); 
+            $team = $result->fetch_assoc();
+        
+            $stmt->close();
+            return $team;  
+        }
+        
+
+        public function deleteTeam($arr_col) {
+            // Prepare the DELETE statement
+            $sql = "DELETE FROM team WHERE idteam = ?";
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+            $stmt->bind_param("i", $arr_col['idteam']);
+            $stmt->execute();
+            if ($stmt->affected_rows > 0) {
+                return true; 
+            } else {
+                return false; 
+            }
+        }
+        
     }
 ?>

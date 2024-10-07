@@ -1,31 +1,22 @@
 <?php
-require_once 'db.php';
+require_once("../Class/teamclass.php");
+require_once("../Class/gameclass.php");
 
-if (isset($_GET['idteam']) && !empty($_GET['idteam'])) {
-    $idteam = intval($_GET['idteam']); 
+if(isset($_GET['idteam'])){
+    $idteam = $_GET['idteam'];
+    $object = new Team();
+    $team = $object->getTeamById($idteam); // Fetch team by id
 
-    $sql = "SELECT * FROM team WHERE idteam = ?";
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        die("Error preparing statement: " . $conn->error);
-    }
-    $stmt->bind_param("i", $idteam);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows == 1) {
-        $team = $result->fetch_assoc();
-
-        $sql = "SELECT idgame, name FROM game";
-        $games = $conn->query($sql);
-    } else {
-        echo "Team tidak ditemukan.";
-        exit();
+    if(!$team){
+        die("Team not found");
     }
 } else {
-    echo "ID team tidak ditemukan.";
-    exit();
+    die("Team id is not provided");
 }
+
+$objectGame = new Game();
+$games = $objectGame->getGame('');
+
 ?>
 
 <!DOCTYPE html>
@@ -65,12 +56,7 @@ if (isset($_GET['idteam']) && !empty($_GET['idteam'])) {
     <input type="submit" value="Update Team">
 </form>
 
-<a href="kelolateam.php">Kembali ke daftar team</a>
-
-<?php
-
-$conn->close();
-?>
+<a href="../Kelola/kelolateam.php">Kembali ke daftar team</a>
 
 </body>
 </html>

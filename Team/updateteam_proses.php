@@ -1,28 +1,34 @@
 <?php
-require_once 'db.php';
+require_once '../Database/db.php';  // Ensure this path is correct
+require_once '../Class/teamclass.php';  // Include your team class
 
-$idteam = $_POST['idteam'];
-$name = $_POST['name'];
-$idgame = $_POST['idgame'];
 
-$sql = "UPDATE team SET name = ?, idgame = ? WHERE idteam = ?";
+if (isset($_POST['idteam'], $_POST['name'], $_POST['idgame'])) {
+   
+    $idteam = $_POST['idteam'];
+    $name = $_POST['name'];
+    $idgame = $_POST['idgame'];
 
-$stmt = $conn->prepare($sql);
-if ($stmt === false) {
-    die("Error preparing statement: " . $conn->error);
-}
+    $team = new Team();
 
-$stmt->bind_param("sii", $name, $idgame, $idteam);
+    $updateData = [
+        'idteam' => $idteam,
+        'name' => $name,
+        'idgame' => $idgame
+    ];
 
-if ($stmt->execute()) {
-    echo "Team berhasil diperbarui.";
+    $result = $team->updateTeam($updateData);
+
+    if ($result) {
+        echo "<script>alert('Team berhasil diperbarui.');</script>";
+    } else {
+        echo "<script>alert('Error: Gagal memperbarui tim.');</script>";
+    }
+
+    header("Location: ../Kelola/kelolateam.php");
+    exit();
 } else {
-    echo "Error: " . $stmt->error;
+    echo "Form data is incomplete.";
 }
 
-$stmt->close();
-$conn->close();
-
-header("Location: kelolateam.php");
-exit();
 ?>

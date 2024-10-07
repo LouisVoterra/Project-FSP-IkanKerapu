@@ -63,8 +63,8 @@
                         <td>" . htmlspecialchars($row["idteam"]) . "</td>
                         <td>" . htmlspecialchars($row["team_name"]) . "</td>
                         <td>" . htmlspecialchars($row["game_name"]) . "</td>
-                        <td><a href='updateteam.php?idteam=" . $row["idteam"] . "'>Edit</a></td>
-                        <td><a href='deleteteam.php?idteam=" . $row["idteam"] . "'>Delete</a></td>
+                        <td><a href='../Team/updateteam.php?idteam=" . $row["idteam"] . "'>Edit</a></td>
+                        <td><a href='../Team/deleteteam.php?idteam=" . $row["idteam"] . "'>Delete</a></td>
                     </tr>";
             }
             echo "</table>";
