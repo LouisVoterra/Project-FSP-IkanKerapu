@@ -1,31 +1,33 @@
 <?php
-require_once 'db.php';
+require_once '../Database/db.php';  // Ensure this path is correct
+require_once '../Class/gameclass.php';  // Include your team class
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+if (isset($_POST['idgame'], $_POST['name'], $_POST['description'])) {
+   
     $idgame = $_POST['idgame'];
     $name = $_POST['name'];
     $description = $_POST['description'];
 
-    $sql = "UPDATE game SET name = ?, description = ? WHERE idgame = ?";
+    $game = new Game();
 
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        die("Error preparing statement: " . $conn->error);
-    }
 
-    $stmt->bind_param("ssi", $name, $description, $idgame);
+    $result = $game->updateGame([
+        'idgame' => $idgame,
+        'name' => $name,
+        'description' => $description
+    ]);
 
-    if ($stmt->execute()) {
-        echo "Data berhasil diperbarui.";
-        echo "<br><a href='kelolagame.php'>Kembali ke daftar game</a>";
+    if ($result) {
+        echo "<script>alert('Team berhasil diperbarui.');</script>";
     } else {
-        echo "Error: " . $stmt->error;
+        echo "<script>alert('Error: Gagal memperbarui tim.');</script>";
     }
 
-    $stmt->close();
-    $conn->close();
+    header("Location: ../Kelola/kelolagame.php");
+    exit();
 } else {
-    echo "Data tidak dikirim.";
+    echo "Form data is incomplete.";
 }
+
 ?>

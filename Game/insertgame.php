@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Insert Game</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
@@ -16,7 +17,7 @@
     <label for="description">Deskripsi Game:</label><br>
     <textarea id="description" name="description" required></textarea><br><br>
 
-    <input type="submit" value="Submit">
+    <input type="submit" value="Submit" name="Submit">
 </form>
 
 </body>

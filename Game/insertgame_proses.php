@@ -1,30 +1,28 @@
 <?php
-require_once 'db.php';
+require_once("../Database/db.php"); //
+require_once("../Class/gameclass.php"); //
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($_POST['Submit'])) {
+
+    var_dump($_POST);
+
     $name = $_POST['name'];
     $description = $_POST['description'];
 
-    $sql = "INSERT INTO game (name, description) VALUES (?, ?)";
+    $object =  new Game();
+    $game = $object->insertGame([
+        'name' => $name,
+        'description' => $description,
+    ]);
 
-    $stmt = $conn->prepare($sql);
-
-    if ($stmt === false) {
-        die("Error preparing statement: " . $conn->error);
-    }
-
-    $stmt->bind_param("ss", $name, $description);
-
-    if ($stmt->execute()) {
-        echo "Data berhasil ditambahkan.";
-        echo "<br><a href='insertgame.php'>Tambah game lagi</a>";
-        echo "<br><a href='kelolagame.php'>daftar game</a>";
+    if ($sql) {
+        echo "<script>alert('Data inserted');</script>";
+        header("Location: ../Kelola/kelolagame.php");
     } else {
-        echo "Error: " . $stmt->error;
+        echo "<script>alert('Data not inserted');</script>";
+        header("Location: insertgame_proses.php");
     }
-
-    $stmt->close();
-    $conn->close();
+    
 } else {
     echo "Form belum disubmit.";
 }
