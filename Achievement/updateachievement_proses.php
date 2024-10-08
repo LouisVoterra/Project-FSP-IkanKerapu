@@ -1,31 +1,32 @@
 <?php
-require_once 'db.php';
+require_once("../Class/achievementclass.php");
 
 if (isset($_POST["submit"])) {
-
-    $idachievement = intval($_POST['idachievement']);
+    $idachievement = intval($_POST['idachievement']); // Ensure idachievement is retrieved and casted to int
     $name = $_POST['name'];
+    $date = date('Y-m-d', strtotime($_POST['date']));
     $description = $_POST['description'];
     $idteam = intval($_POST['idteam']);
 
-    $sql = "UPDATE achievement SET idteam = ?, name = ?, date = NOW(), description = ? WHERE idachievement = ?";
+    $sql = new Achievement();
     
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        die("Error preparing statement: " . $conn->error);
-    }
+    $updateData = [
+        'idachievement' => $idachievement, // Include idachievement
+        'name' => $name,
+        'date' => $date,
+        'description' => $description,
+        'idteam' => $idteam,
+    ];
+    
+    $stmt = $sql->updateAchievement($updateData); // Pass array of data
 
-    $stmt->bind_param("issi", $idteam, $name, $description, $idachievement);
-
-    if ($stmt->execute()) {
-        echo "Achivement berhasil diperbarui.";
+    if ($stmt) {
+        header("Location: ../Kelola/kelolaachievment.php");
+        exit();
     } else {
-        echo "Error: " . $stmt->error;
+        echo "<script>alert('Update failed');</script>";
+        header("Location: updateachievement.php");
+        exit();
     }
-    $stmt->close();
-    $conn->close();
-
-    header("Location: kelolaachievment.php");
-    exit();
 }
 ?>

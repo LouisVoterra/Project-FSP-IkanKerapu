@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require_once("../Class/achievementclass.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $idteam = $_POST['idteam'];
@@ -7,26 +7,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date = date('Y-m-d', strtotime($_POST['date']));
     $description = $_POST['description'];
 
-    $sql = "INSERT INTO achievement (idteam , name, date , description) VALUES (?, ?, ?, ?)";
+    $sql = new Achievement();
+    $stmt = $sql->insertAchievement([
+        'idteam' => $idteam,
+        'name' => $name,
+        'date' => $date,
+        'description' => $description,
 
-    $stmt = $conn->prepare($sql);
+    ]);
 
-    if ($stmt === false) {
-        die("Error preparing statement: " . $conn->error);
-    }
-
-    $stmt->bind_param("isss",$idteam, $name, $date, $description);
-
-    if ($stmt->execute()) {
-        echo "Data berhasil ditambahkan.";
-        echo "<br><a href='insertachievement.php'>Tambah event lagi</a>";
-        echo "<br><a href='kelolaachievment.php'>Home</a>";
+    if ($stmt) {
+        echo "<script>alert('Data inserted');</script>";
+        header("Location: ../Kelola/kelolaachievment.php");
     } else {
-        echo "Error: " . $stmt->error;
+        echo "<script>alert('Data not inserted');</script>";
+        header("Location: insertachievement.php");
     }
 
-    $stmt->close();
-    $conn->close();
+   
 } else {
     echo "Form belum disubmit.";
 }

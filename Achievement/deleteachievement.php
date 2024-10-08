@@ -1,54 +1,24 @@
 <?php
-require_once 'db.php';
+require_once("../Class/achievementclass.php");
 
 if (isset($_GET['idachievement'])) {
-    $idachievement = $_GET['idachievement'];
+    $idevent = intval($_GET['idachievement']); 
+    $object = new Achievement();
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $arr_col = ['idachievement' => $idevent];
 
-        $sql = "DELETE FROM achievement WHERE idachievement = ?";
+   
+    if ($object->deleteAchievement($arr_col)) {
         
-
-        $stmt = $conn->prepare($sql);
-        if ($stmt === false) {
-            die("Error preparing statement: " . $conn->error);
-        }
-
-        $stmt->bind_param("i", $idachievement);
-
-        if ($stmt->execute()) {
-            echo "Data berhasil dihapus.";
-            echo "<br><a href='kelolaachievment.php'>Kembali ke daftar achievment</a>";
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-
-        $stmt->close();
-        $conn->close();
+        header("Location: ../Kelola/kelolaachievment.php?status=success");
     } else {
-        ?>
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Hapus Game</title>
-        </head>
-        <body>
-
-        <h2>Konfirmasi Penghapusan</h2>
-        <p>Apakah Anda yakin ingin menghapus game dengan ID <?php echo htmlspecialchars($idachievement); ?>?</p>
-
-        <form action="deleteachievement.php?idachievement=<?php echo htmlspecialchars($idachievement); ?>" method="POST">
-            <input type="submit" value="Hapus">
-            <a href="home.php">Batal</a>
-        </form>
-
-        </body>
-        </html>
-        <?php
+        
+        header("Location: ../Kelola/kelolaachivement.php?status=error");
     }
 } else {
-    echo "ID achievement tidak ditemukan.";
+    echo "ID team tidak ditemukan.";
+    exit();
 }
+
+exit();
 ?>

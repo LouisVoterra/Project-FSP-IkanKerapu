@@ -1,60 +1,35 @@
 <?php
-    require_once("movieclass.php");
-    require_once("pemainclass.php");
+    require_once("../Class/achievementclass.php");    
 ?>
 <html>
     <head>
-        <title>Movie</title>
-        <style>
-            .text_merah {
-                color: red;
-            }
-
-            .poster {
-                width: 50px;
-                height: 100px;
-                object-fit: cover;
-            }
-
-            #kiri {
-                display: inline-block;
-                width: 200px;
-            }
-
-            #kanan {
-                display: inline-block;
-                min-width: 800px;
-            }
-
-            body {
-                margin-left:auto;
-                margin-right:auto;
-                width: 1200px;
-            }
-        </style>
+        <title>Kelola Achievement</title>
     </head>
+    <link rel="stylesheet" href="../style.css">
     <body>
-        <h1>My Movie</h1>
-        <div id="kiri">
-            <ul>
-                <li><a href="#">Daftar Movie</a></li>
-                <li><a href="#">Daftar Pemain</a></li>
-                <li><a href="#">Daftar Genre</a></li>
-            </ul>
+        <div class="position">
+            <nav class="navigation">
+                <ul>
+                    <li><a href="kelolateam.php">Kelola Team</a></li>
+                    <li><a href="kelolagame.php">Kelola Game</a></li>
+                    <li><a href="kelolaachievment.php">Kelola Achievement</a></li>
+                    <li><a href="kelolaevent.php">Kelola Event</a></li>
+                </ul>
+            </nav>
         </div>
+        <h1>Kelola Achievement</h1>
         <div id="kanan">
-            <h2>Daftar Movie</h2>
-            <a href="insertmovie.php">Tambah Movie</a><br><br>
-            <form method="get" action="movie.php">
+            <a href="../Achievement/insertachievement.php">Tambah Achievement</a><br><br>
+            <form method="get" action="kelolaachievment.php">
                 <label for="judul">Masukkan Judul:</label>
-                <input type="text" id="judul" name="judul"
-                       value="<?php echo @$_GET["judul"]; ?>" >
+                <input type="text" id="name" name="name"
+                       value="<?php echo @$_GET["name"]; ?>" >
                 <input type="submit" value="Submit" name="btnSubmit">
-                <a href="movie.php">Reset</a>
+                <a href="kelolaachievment.php">Reset</a>
             </form>
 
     <?php 
-        $movie = new Movie();
+        $movie = new Achievement();
         $totaldata = 0;
         $perhalaman = 5;       
         $currenthalaman = 1;
@@ -64,87 +39,53 @@
             $currenthalaman = $_GET['offset']/$perhalaman + 1;  // Baca offset dan kalkulasi halaman saat ini
         } else { $offset = 0; }
         
-        if(isset($_GET["judul"])) {
-            $res = $movie->getMovie($_GET["judul"], $offset, $perhalaman);
-            $totaldata = $movie->getTotalData($_GET["judul"]);
+        if(isset($_GET["name"])) {
+            $res = $movie->getAchievement($_GET["name"], $offset, $perhalaman);
+            $totaldata = $movie->getTotalData($_GET["name"]);
         } else {
-            $res = $movie->getMovie("", $offset, $perhalaman);
+            $res = $movie->getAchievement("", $offset, $perhalaman);
             $totaldata = $movie->getTotalData("");
         }       
 
         $jumlahhalaman = ceil($totaldata/$perhalaman);
 
-        echo "<table border='1'>";
-        echo "<tr>
-                <th>Judul</th>
-                <th>Tgl. Rilis</th> 
-                <th>Skor</th>
-                <th>Pemain</th>
-                <th>Sinopsis</th>
-                <th>Serial</th>
-                <th>Genre</th>
-                <th>Aksi</th>
+        echo "<br><table border='1'>
+            <tr>
+                <th>ID Achievemet</th>
+                <th>Nama Team</th>
+                <th>Nama Achievement</th>
+                <th>Tanggal</th>
+                <th>Deskripsi</th>
             </tr>";
 
-        while($row = $res->fetch_assoc()) {
-            $formatrilis = strftime("%d %B %Y", strtotime($row['rilis']));
-            $formatserial = "";
-            if($row['serial']) { 
-                $formatserial="Ya";
-            } else { 
-                $formatserial="Tidak";
+            while($row = $res->fetch_assoc()) {
+                echo "<tr>
+                        <td>" . htmlspecialchars($row["idachievement"]) . "</td>
+                        <td>" . htmlspecialchars($row["team_name"]) . "</td>
+                        <td>" . htmlspecialchars($row["name_achievement"]) . "</td>
+                        <td>" . htmlspecialchars($row["date"]) . "</td>
+                        <td>" . htmlspecialchars($row["description"]) . "</td>
+                        <td><a href='../Achievement/updateachievement.php?idachievement=" . $row["idachievement"] . "'>Edit</a></td>
+                        <td><a href='../Achievement/deleteachievement.php?idachievement=" . $row["idachievement"] . "'>Delete</a></td>
+                    </tr>";
             }
-            $textmerah = '';
-            if($row['skor'] < 5) {
-                $textmerah = "class='text_merah'";
-            }
-
-            $namaposter = $row["idmovie"].".".$row["extention"];
-            if(!file_exists("images/".$namaposter)) {
-                $namaposter = "blank.jpg";
-            }            
-
-            //query pemain
-            $pemain = new Pemain();
-            $resPemain = $pemain->getPemain($row['idmovie']);           
-
-            $pemain = "";
-            while($rowPemain = $resPemain->fetch_assoc()) {
-                $pemain.= $rowPemain['nama'].", ";
-            }
-
-            echo "<tr $textmerah>
-                    <td><img class='poster' src='images/".$namaposter."'/><br>".$row['idmovie']."<br>".$row['judul']."</td>
-                    <td>".$formatrilis."</td>
-                    <td>".$row['skor']."</td>
-                    <td>".$pemain."</td>
-                    <td>".$row['sinopsis']."</td>
-                    <td>".$formatserial."</td>
-                    <td>".$row['genre']."</td>
-                    <td>
-                        <a href='editmovie.php?idmovie=".$row['idmovie']."'>Ubah Data</a> 
-                        <a href='hapusmovie.php?idmovie=".$row['idmovie']."'>Hapus Data</a>
-                    </td>
-                </tr>";
-        }
-
-        echo "</table>";
+            echo "</table>";
 
         // paging
         echo "<div>Total Data: ".$totaldata."</div>";
-        echo "<a href='movie.php?offset=0'>First</a>";
+        echo "<a href='kelolaachievment.php?offset=0'>First</a>";
         
         for($i = 1; $i <= $jumlahhalaman; $i++) {
             $off = ($i-1) * $perhalaman;
             if($currenthalaman == $i) {                
-                echo "<a href='movie.php?offset=".$off."'>
+                echo "<a href='kelolaachievment.php?offset=".$off."'>
                       <strong style='color:red'>$i</strong></a> ";
             } else {
-                echo "<a href='movie.php?offset=".$off."'>".$i."</a> ";
+                echo "<a href='kelolaachievment.php?offset=".$off."'>".$i."</a> ";
             }
         }
         $lastoffset = ($jumlahhalaman-1)*$perhalaman;
-        echo "<a href='movie.php?offset=".$lastoffset."'>Last</a>";
+        echo "<a href='kelolaachievment.php?offset=".$lastoffset."'>Last</a>";
         ?>
         </div>    
     </body>

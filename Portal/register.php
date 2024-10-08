@@ -29,8 +29,13 @@
                     <input type="password" name="password" placeholder="Password" require><br><br>
                 </div>
 
+                <div class = "input-box">
+                    <label>Re-password</label>
+                    <input type="password" name="repassword" placeholder="Password" require><br><br>
+                </div>
 
-                <button type="submit" name="btnLogin">Login</button>
+
+                <button type="submit" name="btnSubmit">Login</button>
 
                 <div class="register-box">
                     <p>dont have account <a href="#">Register</a></p>

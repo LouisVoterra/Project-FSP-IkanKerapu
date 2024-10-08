@@ -1,31 +1,24 @@
 <?php
-require_once 'db.php';
+require_once("../Class/achievementclass.php");
+require_once("../Class/teamclass.php");
 
-if (isset($_GET['idachievement']) && !empty($_GET['idachievement'])) {
-    $idachievement = intval($_GET['idachievement']); 
+if (isset($_GET['idachievement'])) {
+    $idachievement = $_GET['idachievement'];
 
-    $sql = "SELECT * FROM achievement WHERE idachievement = ?";
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        die("Error preparing statement: " . $conn->error);
-    }
-    $stmt->bind_param("i", $idachievement);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $sql = new Achievement();
+    $stmt = $sql->getAchievementById($idachievement); // Pass the ID, not the whole object
 
-    if ($result->num_rows == 1) {
-        $team = $result->fetch_assoc();
-
-        $sql = "SELECT idteam, name FROM team";
-        $games = $conn->query($sql);
-    } else {
-        echo "Team tidak ditemukan.";
+    if (!$stmt) {
+        echo "Achievement not found.";
         exit();
     }
 } else {
     echo "ID achievement tidak ditemukan.";
     exit();
 }
+
+$sqlTeam = new Team();
+$stmtTeam = $sqlTeam->getAllTeams(''); // Fetch all teams
 ?>
 
 
@@ -41,31 +34,30 @@ if (isset($_GET['idachievement']) && !empty($_GET['idachievement'])) {
 <h2>Edit Achievement</h2>
 
 <form action="updateachievement_proses.php" method="POST">
-    <input type="hidden" name="idachievement" value="<?php echo htmlspecialchars($team["idachievement"]); ?>">
+    <input type="hidden" name="idachievement" value="<?php echo htmlspecialchars($stmt['idachievement']); ?>">
     
     <label for="name">Nama Achievement:</label>
-    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($team["name"]); ?>" required>
+    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($stmt['name']); ?>" required>
     <br><br>
 
-    <label for="name">Tanggal Achievement:</label>
-    <input type="date" name="date" value="<?php echo htmlspecialchars($team["date"]); ?>" required>
+    <label for="date">Tanggal Achievement:</label>
+    <input type="date" name="date" value="<?php echo htmlspecialchars($stmt['date']); ?>" required>
     <br><br>
     
     <label for="description">Deskripsi Achievement:</label>
-    <textarea id="description" name="description" required><?php echo htmlspecialchars($team["description"]); ?></textarea>
+    <textarea id="description" name="description" required><?php echo htmlspecialchars($stmt['description']); ?></textarea>
     <br><br>
     
-    <label for="idteam">Team:</label>
-    <select id="idteam" name="idteam" required>
-        <?php
-
-        if ($games->num_rows > 0) {
-            while ($row = $games->fetch_assoc()) {
-                $selected = ($row["idteam"] == $team["idteam"]) ? "selected" : "";
-                echo "<option value='" . $row["idteam"] . "' $selected>" . htmlspecialchars($row["name"]) . "</option>";
+    <label for="idteam">Choose Team :</label><br>
+    <select id="idteam" name="idteam" required> <!-- Changed to a single select dropdown -->
+        <option value="">Select a team</option> <!-- Placeholder option -->
+        <?php 
+        if ($stmtTeam && count($stmtTeam) > 0) {
+            foreach($stmtTeam as $teams) {
+                echo "<option value='".htmlspecialchars($teams['idteam'])."'>".htmlspecialchars($teams['name'])."</option>";
             }
         } else {
-            echo "<option value=''>No team available</option>";
+            echo "<option value=''>Tidak ada tim tersedia</option>";
         }
         ?>
     </select>
@@ -75,11 +67,6 @@ if (isset($_GET['idachievement']) && !empty($_GET['idachievement'])) {
 </form>
 
 <a href="home.php">Kembali ke Home</a>
-
-<?php
-
-$conn->close();
-?>
 
 </body>
 </html>

@@ -1,11 +1,11 @@
 <?php
-require_once 'db.php';
+require_once("../Class/teamclass.php");
 
-$sql = "SELECT idteam, name FROM team";
-$result = $conn->query($sql);
+// Assuming getAllTeams() retrieves all teams
+$sql = new Team();
+$result = $sql->getAllTeams(); // Fetch all teams without passing an argument
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,21 +22,22 @@ $result = $conn->query($sql);
     <label for="name">Nama Achievement:</label><br>
     <input type="text" id="name" name="name" required><br><br>
 
-    <label for="description">Tanggal Achievement:</label><br>
-    <input type="date" id="date" name="date"><br><br>
+    <label for="date">Tanggal Achievement:</label><br>
+    <input type="date" id="date" name="date" required><br><br> <!-- Added 'required' -->
 
     <label for="description">Deskripsi Achievement:</label><br>
     <textarea id="description" name="description" required></textarea><br><br>
     
-    <label for="idteam">Choose Team :</label>
-    <select id="idteam" name="idteam" required>
-        <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                echo "<option value='" . $row["idteam"] . "'>" . htmlspecialchars($row["name"]) . "</option>";
+    <label for="idteam">Choose Team :</label><br>
+    <select id="idteam" name="idteam" required> <!-- Changed to a single select dropdown -->
+        <option value="">Select a team</option> <!-- Placeholder option -->
+        <?php 
+        if ($result && count($result) > 0) {
+            foreach($result as $teams) {
+                echo "<option value='".htmlspecialchars($teams['idteam'])."'>".htmlspecialchars($teams['name'])."</option>";
             }
         } else {
-            echo "<option value=''>No teams available</option>";
+            echo "<option value=''>Tidak ada tim tersedia</option>";
         }
         ?>
     </select>

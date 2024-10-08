@@ -1,10 +1,10 @@
 <?php
-require_once("../Database/db.php"); //
-require_once("../Class/gameclass.php"); //
+require_once("../Database/db.php"); 
+require_once("../Class/gameclass.php"); 
 
 if (isset($_POST['Submit'])) {
 
-    var_dump($_POST);
+    
 
     $name = $_POST['name'];
     $description = $_POST['description'];
@@ -15,7 +15,7 @@ if (isset($_POST['Submit'])) {
         'description' => $description,
     ]);
 
-    if ($sql) {
+    if ($game) {
         echo "<script>alert('Data inserted');</script>";
         header("Location: ../Kelola/kelolagame.php");
     } else {

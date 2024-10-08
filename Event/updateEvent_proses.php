@@ -1,32 +1,43 @@
 <?php
-require_once 'db.php';
+require_once("../Class/eventclass.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $idevent = $_POST['idevent'];
     $name = $_POST['name'];
     $date = date('Y-m-d', strtotime($_POST['date']));
     $description = $_POST['description'];
+    $teams = $_POST['teams']; // Assuming this is an array of selected teams (use <select multiple> or checkboxes)
 
-    $sql = "UPDATE event SET name = ?,date = ?, description = ? WHERE idevent = ?";
+    $sql = new Event();
+    
+    // Update the event first
+    $eventUpdated = $sql->updateEvent([
+        'idevent' => $idevent,
+        'name' => $name,
+        'date' => $date,
+        'description' => $description,
+    ]);
 
-    $stmt = $conn->prepare($sql);
+    if ($eventUpdated) {
+        // First, delete the previous team associations for the event
+        $sql->deleteEventTeams($idevent);
 
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        die("Error preparing statement: " . $conn->error);
-    }
+        // Then, insert the new team associations
+        foreach ($teams as $idteam) {
+            $sql->update_event_team([
+                'idevent' => $idevent,
+                'idteam' => intval($idteam) // Ensure team ID is an integer
+            ]);
+        }
 
-    $stmt->bind_param("sssi",$name, $date , $description, $idevent);
-
-    if ($stmt->execute()) {
-        echo "Data berhasil diperbarui.";
-        echo "<br><a href='kelolaevent.php'>Kembali ke daftar event</a>";
+        echo "<script>alert('Event and teams updated successfully');</script>";
+        header("Location: ../Kelola/kelolaevent.php");
+        exit();
     } else {
-        echo "Error: " . $stmt->error;
+        echo "<script>alert('Event update failed');</script>";
+        header("Location: ../Kelola/kelolaevent.php");
+        exit();
     }
-
-    $stmt->close();
-    $conn->close();
 } else {
     echo "Data tidak terkirim.";
 }

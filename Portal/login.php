@@ -2,7 +2,7 @@
     <head>
         <title>Login</title>
     </head>
-    <link rel = "stylesheet" href="style.css">
+    <link rel = "stylesheet" href="../style.css">
     <body class="login">
         <div class='wrapper'> 
             <form action="login_process.php" method="post">
@@ -20,7 +20,7 @@
                 </div>
 
 
-                <button type="submit" name="btnLogin">Login</button>
+                <input type="submit" value="Login" name="btnLogin">
 
                 <div class="register-box">
                     <p>dont have account <a href="register.php">Register</a></p>

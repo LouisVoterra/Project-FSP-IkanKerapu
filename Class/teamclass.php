@@ -62,6 +62,36 @@
             }
         }
 
+        public function getAllTeams() {
+            // SQL query to fetch all teams
+            $sql = "SELECT * FROM team";
+            $stmt = $this->mysqli->prepare($sql);
+        
+            if ($stmt === false) {
+                // Log the error and return null
+                error_log("Error preparing statement: " . $this->mysqli->error);
+                return null;
+            }
+        
+            $stmt->execute();
+            
+            // Get the result set
+            $result = $stmt->get_result();
+        
+            // Fetch all teams as an associative array
+            $teams = [];
+            while ($row = $result->fetch_assoc()) {
+                $teams[] = $row;
+            }
+        
+            // Clean up
+            $stmt->close();
+        
+            // Return the array of teams (could be empty if no teams found)
+            return $teams;
+        }
+        
+
         public function getTeamById($id) {
             $sql = "SELECT * FROM team WHERE idteam = ?";
             $stmt = $this->mysqli->prepare($sql);

@@ -1,29 +1,24 @@
 <?php
-require_once 'db.php';
+require_once("../Class/eventclass.php");
 
-if (isset($_GET['idevent']) && !empty($_GET['idevent'])) {
-    $idteam = intval($_GET['idevent']); 
+if (isset($_GET['idevent'])) {
+    $idevent = intval($_GET['idevent']); 
+    $object = new Event();
 
-    $sql = "DELETE FROM event WHERE idevent = ?";
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        die("Error preparing statement: " . $conn->error);
-    }
-    $stmt->bind_param("i", $idteam);
+    $arr_col = ['idevent' => $idevent];
 
-    if ($stmt->execute()) {
-        echo "Evemt berhasil dihapus.";
+   
+    if ($object->deleteEvent($arr_col)) {
+        
+        header("Location: ../Kelola/kelolaevent.php?status=success");
     } else {
-        echo "Error: " . $stmt->error;
+        
+        header("Location: ../Kelola/kelolaevent.php?status=error");
     }
-
-    $stmt->close();
 } else {
-    echo "ID Event tidak ditemukan.";
+    echo "ID team tidak ditemukan.";
+    exit();
 }
 
-$conn->close();
-
-header("Location: kelolaevent.php");
 exit();
 ?>
