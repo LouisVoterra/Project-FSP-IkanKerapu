@@ -17,7 +17,10 @@
                 // cek password
                 $row = $result->fetch_assoc();
                 if(password_verify($password, $row['password'])) {
-                    return true;
+                    return [
+                        'status' => true,
+                        'profile' => $row['profile']
+                    ];
                 } else {
                     return false;
                 }
