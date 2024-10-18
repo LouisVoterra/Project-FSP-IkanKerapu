@@ -1,16 +1,3 @@
-<?php
-
-session_start();
-
-
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php"); 
-    exit();
-}
-
-$username = $_SESSION['username'];
-$profile = $_SESSION['profile'];
-?>
 
 <!DOCTYPE html>
 <html lang="en">

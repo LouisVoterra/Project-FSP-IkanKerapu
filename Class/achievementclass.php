@@ -87,7 +87,7 @@ class Achievement extends DBParent {
     }
 
     public function deleteAchievement($arr_col) {
-        $sql = "DELETE FROM achievement WHERE idachievement = ?";
+        $sql = "DELETE idteam FROM achievement WHERE idteam = ?";
         $stmt = $this->mysqli->prepare($sql);
         
         if ($stmt === false) {
