@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $date = date('Y-m-d', strtotime($_POST['date']));
     $description = $_POST['description'];
-    $teams = $_POST['teams']; // Assuming this is an array of selected teams (use <select multiple> or checkboxes)
+    $teams = $_POST['team']; // Assuming this is an array of selected teams (use <select multiple> or checkboxes)
 
     $sql = new Event();
     
@@ -30,10 +30,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ]);
         }
 
+        // Redirect to the event management page after success
         echo "<script>alert('Event and teams updated successfully');</script>";
         header("Location: ../Kelola/kelolaevent.php");
         exit();
     } else {
+        // Handle failure of event update
         echo "<script>alert('Event update failed');</script>";
         header("Location: ../Kelola/kelolaevent.php");
         exit();

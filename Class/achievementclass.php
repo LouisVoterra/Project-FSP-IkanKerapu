@@ -94,7 +94,7 @@ class Achievement extends DBParent {
             die("Error preparing statement: " . $this->mysqli->error);
         }
         
-        $stmt->bind_param("i", $arr_col['idachievement']);
+        $stmt->bind_param("i", $arr_col['idachivement']);
         $stmt->execute();
         
         if ($stmt->affected_rows > 0) {

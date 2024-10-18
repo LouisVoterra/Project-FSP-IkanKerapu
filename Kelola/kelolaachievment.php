@@ -36,7 +36,7 @@
 
         if(isset($_GET['offset'])) { 
             $offset = $_GET['offset']; 
-            $currenthalaman = $_GET['offset']/$perhalaman + 1;  // Baca offset dan kalkulasi halaman saat ini
+            $currenthalaman = $_GET['offset']/$perhalaman + 1;  
         } else { $offset = 0; }
         
         if(isset($_GET["name"])) {

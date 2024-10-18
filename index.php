@@ -1,24 +1,38 @@
-<!-- Top Navigation Bar -->
-<nav class="topnav">
-        <a class="active" href="/">Homepage</a>
-        <a href="/teams.php">Teams</a>
-        <a href="/members.php">Members</a>
-        <a href="/events.php">Events</a>
-        <a href="/about.php">About Us</a>
-        <a href="/how-to-join.php">How to Join</a>
-        <?php
-        if (!isset($_SESSION['username'])) {
-            // User is not logged in
-            echo '<a class="active" href="/login.php">Login</a>';
-        } else {
-            // User is logged in
-            $displayName = "Welcome, " . $_SESSION['idmember'] . " - " . $_SESSION['username']; // Append ID and username
-            echo '<a class="logout" href="/logout.php">Logout</a>';
-            echo '<a class="active" href="/profile.php">' . htmlspecialchars($displayName) . '</a>';
-            // To check whether is admin or not
-            if (isset($_SESSION['profile']) && $_SESSION['profile'] == 'admin') {
-                echo '<a href="/admin/">Admin Site</a>';
-            }
-        }
-        ?>
-    </nav>
+<?php
+
+session_start();
+
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$username = $_SESSION['username'];
+$profile = $_SESSION['profile'];
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Datang di Halaman Esport!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="position">
+        <nav class="navigation">
+            <ul>
+                <li><a href="Member/applyteam.php">Apply Team</a></li>
+                <li><a href="Member/kelolagame.php">Display Team</a></li>
+                <li><a href="Member/kelolaachievment.php">Status Proposal</a></li>
+            </ul>
+        </nav>
+    </div>
+    <p>Nama: <?php echo htmlspecialchars($username); ?></p>
+    <p>Profile: <?php echo htmlspecialchars($profile); ?></p>
+    <h1 class="portal">Selamat datang di Halaman Esport!</h1>
+    
+</body>
+</html>

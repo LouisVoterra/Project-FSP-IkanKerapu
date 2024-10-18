@@ -1,9 +1,9 @@
 <?php
-    require_once("../Class/eventclass.php");    
+    require_once("../Class/userclass.php");    
 ?>
 <html>
     <head>
-        <title>Kelola Game</title>
+        <title>Daftar Proposal</title>
     </head>
     <link rel="stylesheet" href="../style.css">
     <body>
@@ -14,36 +14,36 @@
                     <li><a href="kelolagame.php">Kelola Game</a></li>
                     <li><a href="kelolaachievment.php">Kelola Achievement</a></li>
                     <li><a href="kelolaevent.php">Kelola Event</a></li>
+                    <li><a href="daftar_proposal.php">Daftar Proposal</a></li>
                 </ul>
             </nav>
         </div>
-        <h1>Kelola Event</h1>
+        <h1>Daftar Proposal</h1>
         <div id="kanan">
-            <a href="../Event/insertevent.php">Tambah Event</a><br><br>
-            <form method="get" action="kelolaevent.php">
+            <form method="get" action="daftar_proposal.php">
                 <label for="judul">Masukkan Judul:</label>
                 <input type="text" id="name" name="name"
                        value="<?php echo @$_GET["name"]; ?>" >
                 <input type="submit" value="Submit" name="btnSubmit">
-                <a href="kelolaevent.php">Reset</a>
+                <a href="daftar_proposal.php">Reset</a>
             </form>
 
     <?php 
-        $movie = new Event();
+        $movie = new User();
         $totaldata = 0;
         $perhalaman = 5;       
         $currenthalaman = 1;
 
         if(isset($_GET['offset'])) { 
             $offset = $_GET['offset']; 
-            $currenthalaman = $_GET['offset']/$perhalaman + 1;  
+            $currenthalaman = $_GET['offset']/$perhalaman + 1; 
         } else { $offset = 0; }
         
         if(isset($_GET["name"])) {
-            $res = $movie->getEvent($_GET["name"], $offset, $perhalaman);
+            $res = $movie->daftar_proposal($_GET["name"], $offset, $perhalaman);
             $totaldata = $movie->getTotalData($_GET["name"]);
         } else {
-            $res = $movie->getEvent("", $offset, $perhalaman);
+            $res = $movie->daftar_proposal("", $offset, $perhalaman);
             $totaldata = $movie->getTotalData("");
         }       
 
@@ -51,43 +51,41 @@
 
         echo "<br><table border='1'>
             <tr>
-                <th>ID Event</th>
+                <th>ID Proposal</th>
                 <th>Nama Team</th>
-                <th>Nama Event</th>
+                <th>Nama User</th>
                 <th>Deskripsi</th>
-                <th>Tanggal</th>
                 <th></th>
-                <th></th>
+                <th></th>   
             </tr>";
 
             while($row = $res->fetch_assoc()) {
                 echo "<tr>
-                        <td>" . htmlspecialchars($row["event_id"]) . "</td>
+                        <td>" . htmlspecialchars($row["id"]) . "</td>
                         <td>" . htmlspecialchars($row["team_name"]) . "</td>
-                        <td>" . htmlspecialchars($row["event_name"]) . "</td>
-                        <td>" . htmlspecialchars($row["event_description"]) . "</td>
-                        <td>" . htmlspecialchars($row["event_date"]) . "</td>
-                        <td><a href='../Event/updateevent.php?idevent=" . $row["event_id"] . "'>Edit</a></td>
-                        <td><a href='../Event/deleteevent.php?idevent=" . $row["event_id"] . "'>Delete</a></td>
+                        <td>" . htmlspecialchars($row["name"]) . "</td>
+                        <td>" . htmlspecialchars($row["description"]) . "</td>
+                        <td><a href='../proposal/acceptproposal.php?id=" . $row["id"] . "'>Accept</a></td>
+                        <td><a href='../proposal/deniedproposal.php?id=" . $row["id"] . "'>Denied</a></td>
                     </tr>";
             }
             echo "</table>";
 
         // paging
         echo "<div>Total Data: ".$totaldata."</div>";
-        echo "<a href='kelolaevent.php?offset=0'>First</a>";
+        echo "<a href='daftar_proposal.php?offset=0'>First</a>";
         
         for($i = 1; $i <= $jumlahhalaman; $i++) {
             $off = ($i-1) * $perhalaman;
             if($currenthalaman == $i) {                
-                echo "<a href='kelolaevent.php?offset=".$off."'>
+                echo "<a href='daftar_proposal.php?offset=".$off."'>
                       <strong style='color:red'>$i</strong></a> ";
             } else {
-                echo "<a href='kelolaevent.php?offset=".$off."'>".$i."</a> ";
+                echo "<a href='daftar_proposal.php?offset=".$off."'>".$i."</a> ";
             }
         }
         $lastoffset = ($jumlahhalaman-1)*$perhalaman;
-        echo "<a href='kelolaevent.php?offset=".$lastoffset."'>Last</a>";
+        echo "<a href='daftar_proposal.php?offset=".$lastoffset."'>Last</a>";
         ?>
         </div>    
     </body>

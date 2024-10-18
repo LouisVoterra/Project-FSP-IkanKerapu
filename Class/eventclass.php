@@ -109,7 +109,7 @@
         }
 
         public function update_event_team($arr_col){
-            $sql = "UPDATE event_teams SET idteam =? WHERE idevent =?";
+            $sql = "UPDATE event_teams SET idteam =? WHERE idevent AND idteam=?";
             $stmt = $this->mysqli->prepare($sql);
             $stmt->bind_param("ii", $arr_col['idteam'], $arr_col['idevent']);
             $stmt->execute();
@@ -118,7 +118,7 @@
         
         public function deleteEventTeams($idevent) {
             // SQL query to delete all entries in the event_teams table related to a specific event (idevent)
-            $sql = "DELETE FROM event_teams WHERE idevent = ?";
+            $sql = "DELETE FROM event_teams WHERE idteam = ?";
             
             // Prepare the SQL statement
             $stmt = $this->mysqli->prepare($sql);
@@ -135,6 +135,9 @@
             // Close the statement to free resources
             $stmt->close();
         }
+
+        
+        
         
     }
 ?>

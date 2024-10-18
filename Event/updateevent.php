@@ -39,22 +39,12 @@ $team = $sql->getAllTeams();
             <label for="description">Deskripsi Event:</label><br>
             <textarea id="description" name="description" required><?php echo htmlspecialchars($event['description']); ?></textarea><br><br>
 
-            <select id="idteam" name="team[]" required> <!-- Changed to a single select dropdown -->
-            <option value="">Select a team</option> <!-- Placeholder option -->
-            <?php 
-            if ($team && count($team) > 0) {
-                foreach($team as $teams) {
-                    echo "<option value='".htmlspecialchars($teams['idteam'])."'>".htmlspecialchars($teams['name'])."</option>";
-                }
-            } else {
-                echo "<option value=''>Tidak ada tim tersedia</option>";
-            }
-            ?>
-            </select>
+            <label for="idteam">Choose Team:</label><br>
+            <?php foreach ($team as $teams): ?>
+                <input type="checkbox" name="team[]" value="<?php echo $teams['idteam'];?>"> <?php echo $teams['name'];?><br>
+            <?php endforeach;?>
             <br><br>
-
-            
-
+        
             <input type="submit" value="Update">
         </form>
     </body>
