@@ -1,7 +1,6 @@
 <?php
-require_once '../Database/db.php';  // Ensure this path is correct
-require_once '../Class/gameclass.php';  // Include your team class
-
+require_once '../Database/db.php';  
+require_once '../Class/gameclass.php';  
 
 if (isset($_POST['idgame'], $_POST['name'], $_POST['description'])) {
    

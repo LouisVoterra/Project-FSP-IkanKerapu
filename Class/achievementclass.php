@@ -87,14 +87,14 @@ class Achievement extends DBParent {
     }
 
     public function deleteAchievement($arr_col) {
-        $sql = "DELETE idteam FROM achievement WHERE idteam = ?";
+        $sql = "DELETE FROM achievement WHERE idachievement = ?";
         $stmt = $this->mysqli->prepare($sql);
         
         if ($stmt === false) {
             die("Error preparing statement: " . $this->mysqli->error);
         }
         
-        $stmt->bind_param("i", $arr_col['idachivement']);
+        $stmt->bind_param("i", $arr_col['idachievement']);
         $stmt->execute();
         
         if ($stmt->affected_rows > 0) {
@@ -102,6 +102,17 @@ class Achievement extends DBParent {
         } else {
             return false;
         }
+    }
+
+    public function getTeamsForAchievement($idachievement) {
+        $sql = "SELECT t.idteam, t.name FROM team t 
+                INNER JOIN achievement at ON t.idteam = at.idteam
+                WHERE at.idachievement = ?";
+        $stmt = $this->mysqli->prepare($sql);
+        $stmt->bind_param("i", $idachievement);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 }
 ?>

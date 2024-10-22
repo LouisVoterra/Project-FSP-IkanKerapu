@@ -3,39 +3,51 @@ require_once("../Class/eventclass.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $idevent = $_POST['idevent'];
-    $name = $_POST['name'];
-    $date = date('Y-m-d', strtotime($_POST['date']));
-    $description = $_POST['description'];
-    $teams = $_POST['team']; // Assuming this is an array of selected teams (use <select multiple> or checkboxes)
+    $name = isset($_POST['name']) ? $_POST['name'] : null;
+    $date = isset($_POST['date']) ? date('Y-m-d', strtotime($_POST['date'])) : null;
+    $description = isset($_POST['description']) ? $_POST['description'] : null;
+    $teams = isset($_POST['team']) ? $_POST['team'] : []; 
 
     $sql = new Event();
+
     
-    // Update the event first
-    $eventUpdated = $sql->updateEvent([
-        'idevent' => $idevent,
-        'name' => $name,
-        'date' => $date,
-        'description' => $description,
-    ]);
+    if ($name || $date || $description) {
+        $eventUpdated = $sql->updateEvent([
+            'idevent' => $idevent,
+            'name' => $name,
+            'date' => $date,
+            'description' => $description,
+        ]);
+    } else {
+        $eventUpdated = true; 
+    }
 
-    if ($eventUpdated) {
-        // First, delete the previous team associations for the event
-        $sql->deleteEventTeams($idevent);
-
-        // Then, insert the new team associations
-        foreach ($teams as $idteam) {
-            $sql->update_event_team([
-                'idevent' => $idevent,
-                'idteam' => intval($idteam) // Ensure team ID is an integer
-            ]);
+    if ($eventUpdated || !empty($teams)) {  
+        if (!empty($teams)) {
+            $currentTeams = $sql->getTeamsInEvent($idevent);
+    
+            $teamsToAdd = array_diff($teams, $currentTeams);  
+            
+            $teamsToRemove = array_diff($currentTeams, $teams);  
+    
+            foreach ($teamsToRemove as $idteam) {
+                $sql->deleteEventTeams($idevent, $idteam);
+            }
+    
+            foreach ($teamsToAdd as $idteam) {
+                $sql->addEventTeams($idevent, intval($idteam)); 
+            }
         }
+    
 
-        // Redirect to the event management page after success
+        
+
+      
         echo "<script>alert('Event and teams updated successfully');</script>";
         header("Location: ../Kelola/kelolaevent.php");
         exit();
     } else {
-        // Handle failure of event update
+
         echo "<script>alert('Event update failed');</script>";
         header("Location: ../Kelola/kelolaevent.php");
         exit();

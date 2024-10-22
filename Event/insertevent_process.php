@@ -5,11 +5,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $date = date('Y-m-d', strtotime($_POST['date']));
     $description = $_POST['description'];
-    $teams = $_POST['team']; // Array of selected teams
+    $teams = $_POST['team']; 
 
     $event = new Event();
     
-    // Insert the event first
+    
     $idevent = $event->insertEvent([
         'name' => $name,
         'date' => $date,
@@ -17,11 +17,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ]);
 
     if ($idevent) {
-        // If event insertion is successful, insert into event_teams for each selected team
+        
         foreach ($teams as $idteam) {
             $event->event_team([
                 'idevent' => $idevent,
-                'idteam' => intval($idteam) // Ensure team ID is an integer
+                'idteam' => intval($idteam) 
             ]);
         }
         echo "<script>alert('Event and teams inserted successfully');</script>";

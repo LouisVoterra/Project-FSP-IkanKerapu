@@ -27,17 +27,17 @@ $idmember = $object->idUser($username);
 </head>
 <body>
     <form method="post" action="applyteam_process.php">
-        <input type="text" name="idmember" value="<?php echo htmlspecialchars($idmember); ?>">
-        
-        <label for="team">Team:</label>
+        <input type="hidden" name="idmember" value="<?php echo htmlspecialchars($idmember); ?>">
+        <h1>Form Aplikasi </h1>
+        <label for="team">Team:</label><br>
         <select name="name" id="team">
             <option value="">-- Pilih Team --</option>
             <?php foreach($team as $row) { ?>
                 <option value="<?php echo $row['idteam']; ?>"><?php echo $row['name']; ?></option>
             <?php } ?>
-        </select>
+        </select><br><br>
 
-        <textarea id="description" name="description" placeholder="isi"></textarea>
+        <textarea id="description" name="description" placeholder="isi"></textarea><br><br>
         <button type="submit" name="submit">Daftar</button>
     </form>
 </body>

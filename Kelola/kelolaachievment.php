@@ -7,16 +7,17 @@
     </head>
     <link rel="stylesheet" href="../style.css">
     <body>
-        <div class="position">
-            <nav class="navigation">
-                <ul>
-                    <li><a href="kelolateam.php">Kelola Team</a></li>
-                    <li><a href="kelolagame.php">Kelola Game</a></li>
-                    <li><a href="kelolaachievment.php">Kelola Achievement</a></li>
-                    <li><a href="kelolaevent.php">Kelola Event</a></li>
-                </ul>
-            </nav>
-        </div>
+    <div class="position">
+        <nav class="navigation">
+            <ul>
+                <li><a href="kelolateam.php">Kelola Team</a></li>
+                <li><a href="kelolagame.php">Kelola Game</a></li>
+                <li><a href="kelolaachievment.php">Kelola Achievement</a></li>
+                <li><a href="kelolaevent.php">Kelola Event</a></li>
+                <li><a href="daftar_proposal.php">Daftar Proposal</a></li>
+            </ul>
+        </nav>
+    </div>
         <h1>Kelola Achievement</h1>
         <div id="kanan">
             <a href="../Achievement/insertachievement.php">Tambah Achievement</a><br><br>
@@ -71,7 +72,7 @@
             }
             echo "</table>";
 
-        // paging
+        
         echo "<div>Total Data: ".$totaldata."</div>";
         echo "<a href='kelolaachievment.php?offset=0'>First</a>";
         

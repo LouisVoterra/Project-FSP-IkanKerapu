@@ -1,9 +1,8 @@
 <?php
 require_once("../Class/teamclass.php");
 
-// Assuming getAllTeams() retrieves all teams
 $sql = new Team();
-$result = $sql->getAllTeams(); // Fetch all teams without passing an argument
+$result = $sql->getAllTeams(); 
 
 ?>
 
@@ -23,14 +22,14 @@ $result = $sql->getAllTeams(); // Fetch all teams without passing an argument
     <input type="text" id="name" name="name" required><br><br>
 
     <label for="date">Tanggal Achievement:</label><br>
-    <input type="date" id="date" name="date" required><br><br> <!-- Added 'required' -->
+    <input type="date" id="date" name="date" required><br><br> 
 
     <label for="description">Deskripsi Achievement:</label><br>
     <textarea id="description" name="description" required></textarea><br><br>
     
     <label for="idteam">Choose Team :</label><br>
-    <select id="idteam" name="idteam" required> <!-- Changed to a single select dropdown -->
-        <option value="">Select a team</option> <!-- Placeholder option -->
+    <select id="idteam" name="idteam" required> 
+        <option value="">Select a team</option> 
         <?php 
         if ($result && count($result) > 0) {
             foreach($result as $teams) {

@@ -2,12 +2,12 @@
     <head>
         <title>Login</title>
     </head>
-    <link rel = "stylesheet" href="style.css">
+    <link rel = "stylesheet" href="../style.css">
     <body class="login">
         <div class='wrapper'> 
             <form action="register_process.php" method="post">
                 
-                <h1>Login</h1>
+                <h1>Registration</h1>
 
                 <div class = "input-box">
                     <label>first name:</label>
@@ -35,11 +35,9 @@
                 </div>
 
 
-                <button type="submit" name="btnSubmit">Login</button>
+                <button type="submit" name="btnSubmit">Submit</button>
 
-                <div class="register-box">
-                    <p>dont have account <a href="#">Register</a></p>
-                <div>
+                
 
             </form>
         </div>

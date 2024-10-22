@@ -25,8 +25,7 @@ $profile = $_SESSION['profile'];
         <nav class="navigation">
             <ul>
                 <li><a href="Member/applyteam.php">Apply Team</a></li>
-                <li><a href="Member/kelolagame.php">Display Team</a></li>
-                <li><a href="Member/kelolaachievment.php">Status Proposal</a></li>
+                <li><a href="Portal/logout.php">Logout</a></li>
             </ul>
         </nav>
     </div>

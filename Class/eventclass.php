@@ -44,25 +44,42 @@
         }
 
         public function updateEvent($arr_col) {
-            $sql = "UPDATE event SET name = ?, date = ?, description = ? WHERE idevent = ?";
-            $stmt = $this->mysqli->prepare($sql);
+            $updateFields = [];
+            $params = [];
+            $types = '';
         
-            if ($stmt === false) {
-                die("Error preparing statement: " . $this->mysqli->error);
+            if (isset($arr_col['name'])) {
+                $updateFields[] = 'name = ?';
+                $params[] = $arr_col['name'];
+                $types .= 's';
+            }
+            if (isset($arr_col['date'])) {
+                $updateFields[] = 'date = ?';
+                $params[] = $arr_col['date'];
+                $types .= 's';
+            }
+            if (isset($arr_col['description'])) {
+                $updateFields[] = 'description = ?';
+                $params[] = $arr_col['description'];
+                $types .= 's';
             }
         
-            // Bind the parameters (correct order and types)
-            $stmt->bind_param("sssi", $arr_col['name'], $arr_col['date'], $arr_col['description'], $arr_col['idevent']);
+            if (count($updateFields) > 0) {
+                $sql = "UPDATE event SET " . implode(', ', $updateFields) . " WHERE idevent = ?";
+                $params[] = $arr_col['idevent'];
+                $types .= 'i';
         
-            $stmt->execute();
+                $stmt = $this->mysqli->prepare($sql);
         
-            // Check if any rows were affected
-            if ($stmt->affected_rows > 0) {
-                return true; 
-            } else {
-                return false; 
+                $stmt->bind_param($types, ...$params);
+                $stmt->execute();
+        
+                return $stmt->affected_rows > 0;
             }
+        
+            return false;
         }
+        
         
 
         public function getEventbyId($id) {
@@ -84,7 +101,6 @@
         
 
         public function deleteEvent($arr_col) {
-            // Prepare the DELETE statement
             $sql = "DELETE FROM event WHERE idevent = ?";
             $stmt = $this->mysqli->prepare($sql);
             if ($stmt === false) {
@@ -108,32 +124,39 @@
             return $this->mysqli->insert_id;
         }
 
-        public function update_event_team($arr_col){
-            $sql = "UPDATE event_teams SET idteam =? WHERE idevent AND idteam=?";
-            $stmt = $this->mysqli->prepare($sql);
-            $stmt->bind_param("ii", $arr_col['idteam'], $arr_col['idevent']);
-            $stmt->execute();
-            return $stmt->affected_rows;
-        }
         
-        public function deleteEventTeams($idevent) {
-            // SQL query to delete all entries in the event_teams table related to a specific event (idevent)
-            $sql = "DELETE FROM event_teams WHERE idteam = ?";
-            
-            // Prepare the SQL statement
+        
+        public function deleteEventTeams($idevent,$idteam) {
+            $sql = "DELETE FROM event_teams WHERE idevent = ? AND idteam = ?";
             $stmt = $this->mysqli->prepare($sql);
             if ($stmt === false) {
                 die("Error preparing statement: " . $this->mysqli->error);
             }
-            
-            // Bind the event ID (idevent) to the SQL statement
-            $stmt->bind_param("i", $idevent);
-            
-            // Execute the SQL statement
+            $stmt->bind_param("ii", $idevent,$idteam);
             $stmt->execute();
+            return $stmt->affected_rows > 0;
+        }
+
+        public function addEventTeams($idevent,$idteam){
+            $sql = "INSERT INTO event_teams(idevent, idteam) VALUES (?,?)";
+            $stmt = $this->mysqli->prepare($sql);
+            $stmt->bind_param("ii", $idevent, $idteam);
+            $stmt->execute();
+            return $this->mysqli->insert_id;
+        }
+
+        public function getTeamsInEvent($idevent) {
+            $sql = "SELECT idteam FROM event_teams WHERE idevent = ?";
+            $stmt = $this->mysqli->prepare($sql);
+            $stmt->bind_param("i", $idevent);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $teamsInEvent = [];
+            while ($row = $result->fetch_assoc()) {
+                $teamsInEvent[] = $row['idteam'];
+            }
             
-            // Close the statement to free resources
-            $stmt->close();
+            return $teamsInEvent;
         }
 
         

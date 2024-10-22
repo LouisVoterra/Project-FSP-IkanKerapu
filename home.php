@@ -1,3 +1,17 @@
+<?php
+
+session_start();
+
+
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$username = $_SESSION['username'];
+$profile = $_SESSION['profile'];
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,6 +30,7 @@
                 <li><a href="Kelola/kelolaachievment.php">Kelola Achievement</a></li>
                 <li><a href="Kelola/kelolaevent.php">Kelola Event</a></li>
                 <li><a href="Kelola/daftar_proposal.php">Daftar Proposal</a></li>
+                <li><a href="Portal/logout.php">Logout</a></li>
             </ul>
         </nav>
     </div>

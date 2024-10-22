@@ -56,6 +56,7 @@
                 <th>Nama User</th>
                 <th>Deskripsi</th>
                 <th></th>
+                <th></th>
                 <th></th>   
             </tr>";
 
@@ -65,13 +66,14 @@
                         <td>" . htmlspecialchars($row["team_name"]) . "</td>
                         <td>" . htmlspecialchars($row["name"]) . "</td>
                         <td>" . htmlspecialchars($row["description"]) . "</td>
+                        <td>" . htmlspecialchars($row["status"]) . "</td>
                         <td><a href='../proposal/acceptproposal.php?id=" . $row["id"] . "'>Accept</a></td>
                         <td><a href='../proposal/deniedproposal.php?id=" . $row["id"] . "'>Denied</a></td>
                     </tr>";
             }
             echo "</table>";
 
-        // paging
+        
         echo "<div>Total Data: ".$totaldata."</div>";
         echo "<a href='daftar_proposal.php?offset=0'>First</a>";
         

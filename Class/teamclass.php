@@ -102,7 +102,6 @@
         
 
         public function deleteTeam($arr_col) {
-            // Prepare the DELETE statement
             $sql = "DELETE FROM team WHERE idteam = ?";
             $stmt = $this->mysqli->prepare($sql);
             if ($stmt === false) {

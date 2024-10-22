@@ -2,7 +2,7 @@
 require_once("../Class/achievementclass.php");
 
 if (isset($_POST["submit"])) {
-    $idachievement = intval($_POST['idachievement']); // Ensure idachievement is retrieved and casted to int
+    $idachievement = intval($_POST['idachievement']); 
     $name = $_POST['name'];
     $date = date('Y-m-d', strtotime($_POST['date']));
     $description = $_POST['description'];
@@ -11,14 +11,14 @@ if (isset($_POST["submit"])) {
     $sql = new Achievement();
     
     $updateData = [
-        'idachievement' => $idachievement, // Include idachievement
+        'idachievement' => $idachievement, 
         'name' => $name,
         'date' => $date,
         'description' => $description,
         'idteam' => $idteam,
     ];
     
-    $stmt = $sql->updateAchievement($updateData); // Pass array of data
+    $stmt = $sql->updateAchievement($updateData); 
 
     if ($stmt) {
         header("Location: ../Kelola/kelolaachievment.php");
