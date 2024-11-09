@@ -4,7 +4,7 @@ require_once("../Class/gameclass.php");
 
 
 $team = new Game(); 
-$result = $team->getGame(''); // Kosongkan keyword untuk mendapatkan semua data
+$result = $team->getGame(''); 
 
 ?>
 
@@ -44,7 +44,7 @@ $result = $team->getGame(''); // Kosongkan keyword untuk mendapatkan semua data
 <a href="kelolateam.php">Kembali ke Daftar team</a>
 
 <?php
-// Tidak perlu $conn->close() karena koneksi ada di dalam class Team
+
 ?>
 
 </body>

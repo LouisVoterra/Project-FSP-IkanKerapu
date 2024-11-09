@@ -82,6 +82,26 @@
             return $teams;
         }
         
+        public function getTeamsByGameId($idgame) {
+            $sql = "SELECT idteam, name FROM team WHERE idgame = ?";
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+            
+            $stmt->bind_param("i", $idgame);
+            $stmt->execute();
+            
+            $result = $stmt->get_result();
+            $teams = [];
+            while ($row = $result->fetch_assoc()) {
+                $teams[] = $row;
+            }
+            
+            $stmt->close();
+            return $teams;
+        }
+    
 
         public function getTeamById($id) {
             $sql = "SELECT * FROM team WHERE idteam = ?";
@@ -115,6 +135,94 @@
                 return false; 
             }
         }
+
+        public function displayTeam_Member($id) {
+            $sql = "SELECT 
+                        CONCAT(m.fname,' ',m.lname) as nama, 
+                        t.name as team_name 
+                    FROM member m 
+                    INNER JOIN team_members tm ON m.idmember = tm.idmember 
+                    INNER JOIN team t ON tm.idteam = t.idteam
+                    WHERE t.idteam = ?";
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+            
+            $stmt->bind_param("i", $id);  
+            $stmt->execute();
+            
+            $result = $stmt->get_result(); 
+            $members = [];
+            while ($row = $result->fetch_assoc()) {
+                $members[] = $row;
+            }
+        
+            $stmt->close();
+            return $members;
+        }
+
+        public function displayEvent_Team($idteam) {
+            $sql = "SELECT 
+                        e.idevent as id, 
+                        e.name AS event_name
+                    FROM 
+                        event e
+                    INNER JOIN 
+                        event_teams et ON 
+                        e.idevent = et.idevent
+                    WHERE 
+                        et.idteam = ?";
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+        
+            $stmt->bind_param("i", $idteam);
+            $stmt->execute();
+        
+            $result = $stmt->get_result(); 
+            $events = [];
+            while ($row = $result->fetch_assoc()) {
+                $events[] = $row;
+            }
+        
+            $stmt->close();
+            return $events;
+        }
+        
+
+        public function displayAchievement_Team($idteam) {
+            $sql = "SELECT 
+                        a.idachievement as id ,a.name as name 
+                    FROM 
+                        team t
+                    INNER JOIN
+                        achievement a ON t.idteam = a.idteam
+                    INNER JOIN 
+                        event_teams et ON t.idteam = et.idteam
+                    INNER JOIN 
+                        event e ON et.idevent = e.idevent
+                    WHERE 
+                        t.idteam = ?";
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+        
+            $stmt->bind_param("i", $idteam);  
+            $stmt->execute();
+        
+            $result = $stmt->get_result(); 
+            $achievements = [];
+            while ($row = $result->fetch_assoc()) {
+                $achievements[] = $row;
+            }
+        
+            $stmt->close();
+            return $achievements;
+        }
+        
         
     }
 ?>

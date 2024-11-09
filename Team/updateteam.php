@@ -5,7 +5,7 @@ require_once("../Class/gameclass.php");
 if(isset($_GET['idteam'])){
     $idteam = $_GET['idteam'];
     $object = new Team();
-    $team = $object->getTeamById($idteam); // Fetch team by id
+    $team = $object->getTeamById($idteam); 
 
     if(!$team){
         die("Team not found");

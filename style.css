@@ -8,7 +8,7 @@
     margin: 0 auto;
 }
 
-*, html, body{
+*,html,body{
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
@@ -24,8 +24,10 @@
    
 }
 
+
 .position {
     position:sticky;
+    top: 0;
 }
 
 .navigation ul {
@@ -33,7 +35,15 @@
     background-color: blue;
     padding: 0px;
     margin: 0px;
-    overflow: hidden;
+    overflow: hidden;}
+
+.navigation li {
+    float: right;
+    
+}
+
+.navigation li {
+    float: left;
 }
 
 .navigation a {
@@ -53,13 +63,13 @@
 }
 
 .wrapper{
-    width: 420;
-    background:purple;
+    width: 420px;
+    background:rgb(193, 178, 13);
     color:#ffff;
 }
 
 .wrapper h1{
-    font-size: 37;
+    font-size: 37px;
     text-align: center;
     padding-bottom: 5px;
 }
@@ -82,6 +92,7 @@
     border: 2px solid rgba(255, 255, 255, 2);
     border-radius: 40px;
 
+
 }
 
 table {
@@ -100,3 +111,17 @@ th {
     background-color: #04AA6D;
     color: white;
   }
+
+body{
+    background-color: white;
+}
+
+#member_table {
+    display: none;
+    border-collapse: collapse;
+    width: 100%;
+}
+#member_table th, #member_table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
