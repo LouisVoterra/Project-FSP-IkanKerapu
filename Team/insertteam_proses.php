@@ -13,6 +13,8 @@ if (isset($_POST['submit'])) {
         'name' => $name,
     ]);
 
+    
+
     if ($sql) {
         echo "<script>alert('Data inserted');</script>";
         header("Location: ../Kelola/kelolateam.php");

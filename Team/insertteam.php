@@ -19,7 +19,7 @@ $result = $team->getGame('');
 
 <h2>Tambah Team</h2>
 
-<form action="insertteam_proses.php" method="POST">
+<form action="insertteam_proses.php" method="POST" enctype="multipart/form-data">
     <label for="name">Nama Team:</label>
     <input type="text" id="name" name="name" required>
     <br><br>
@@ -36,6 +36,10 @@ $result = $team->getGame('');
         }
         ?>
     </select>
+    <br><br>
+        <div>
+            <input type="file" name="poster[]" id="poster"/>
+        </div>
     <br><br>
     
     <input type="submit" value="Tambah Team" name="submit">

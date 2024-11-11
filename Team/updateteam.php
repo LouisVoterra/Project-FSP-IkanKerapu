@@ -52,6 +52,12 @@ $games = $objectGame->getGame('');
         ?>
     </select>
     <br><br>
+            <div id="filediv">
+                <div>
+                    <input type="file" name="poster[]" id="poster"/>
+                </div>
+            </div>
+    <br><br>
     
     <input type="submit" value="Update Team">
 </form>

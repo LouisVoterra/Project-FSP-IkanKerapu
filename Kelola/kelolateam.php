@@ -3,7 +3,7 @@
 ?>
 <html>
     <head>
-        <title>Movie</title>
+        <title>Kelola Team Informatics Club</title>
     </head>
     <link rel="stylesheet" href="../style.css">
     <body>
@@ -15,6 +15,7 @@
                 <li><a href="kelolaachievment.php">Kelola Achievement</a></li>
                 <li><a href="kelolaevent.php">Kelola Event</a></li>
                 <li><a href="daftar_proposal.php">Daftar Proposal</a></li>
+                <li><a href="../Portal/logout.php">Logout</a></li>
             </ul>
         </nav>
     </div>
@@ -59,9 +60,19 @@
                 <th></th>
             </tr>";
 
+           
+
+            // <td>" . htmlspecialchars($row["idteam"]) . "</td>
             while($row = $res->fetch_assoc()) {
+
+                $namaposter = $row["idteam"];
+                if(!file_exists("images/".$namaposter)) {
+                    $namaposter = "blank.jpg";
+                }
+
                 echo "<tr>
-                        <td>" . htmlspecialchars($row["idteam"]) . "</td>
+                        <td><img class='poster' src='images/".$namaposter."'/><br>".htmlspecialchars($row["idteam"])."</td>
+                       
                         <td>" . htmlspecialchars($row["team_name"]) . "</td>
                         <td>" . htmlspecialchars($row["game_name"]) . "</td>
                         <td><a href='../Team/updateteam.php?idteam=" . $row["idteam"] . "'>Edit</a></td>

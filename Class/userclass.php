@@ -6,10 +6,46 @@
             parent::__construct();
         }
         
-        public function Login($username, $password) {
+        public function LoginUser($username, $password) {
+            $sql = "SELECT 
+                        m.*, p.status
+                     FROM 
+                        member m
+                    INNER JOIN 
+                        join_proposal p 
+                    ON
+                        m.idmember = p.idmember 
+                    WHERE 
+                        m.username = ?
+                    AND
+                        p.status IN ('waiting','approved','rejected') ";
+            $stmt = $this->mysqli->prepare($sql);
+           
+            $stmt->bind_param("s", $username,);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if($result->num_rows > 0) {
+                // cek password
+                $row = $result->fetch_assoc();
+                if(password_verify($password, $row['password'])) {
+                    return [
+                        'status' => true,
+                        'profile' => $row['profile'],
+                        'proposal_status' => $row['status']
+                    ];
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
+        public function LoginAdmin($username, $password) {
             $sql = "SELECT * FROM member WHERE username = ?";
             $stmt = $this->mysqli->prepare($sql);
-            $stmt->bind_param("s", $username);
+            $stmt->bind_param("s", $username,);
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -152,6 +188,31 @@
             $stmt->execute();
             $result = $stmt->get_result();
             return $result;
+        }
+
+        public function proposal_accepted($username) {
+            $sql = "SELECT
+                         p.status
+                    FROM 
+                        member m 
+                    INNER JOIN 
+                        join_proposal p 
+                    ON 
+                        m.idmember = p.idmember 
+                    INNER JOIN 
+                        team t 
+                    on 
+                        t.idteam = p.idteam 
+                    WHERE 
+                        p.status = 'approved'
+                    AND 
+                        m.username = ?";
+            $stmt = $this->mysqli->prepare($sql);
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            return $result->num_rows > 0;
         }
 
         

@@ -190,6 +190,82 @@
             $stmt->close();
             return $events;
         }
+
+        public function getEvent_Teams($idteam, $keyword_judul = "", $offset = null, $limit = null) {
+            
+            $sql = "SELECT 
+                        e.idevent AS event_id,
+                        t.name AS team_name,
+                        e.name AS event_name,
+                        e.description AS event_description,
+                        e.date AS event_date
+                    FROM 
+                        team t 
+                    INNER JOIN 
+                        event_teams et ON t.idteam = et.idteam 
+                    INNER JOIN 
+                        event e ON et.idevent = e.idevent 
+                    WHERE 
+                        t.idteam = ? AND et.idevent AND e.name LIKE ?";
+        
+            
+            if (!is_null($offset) && !is_null($limit)) {
+                $sql .= " LIMIT ?, ?";
+            }
+        
+            
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+        
+           
+            $keyword = "%{$keyword_judul}%";
+            if (!is_null($offset) && !is_null($limit)) {
+                $stmt->bind_param("isii", $idteam, $keyword, $offset, $limit);
+            } else {
+                $stmt->bind_param("is", $idteam, $keyword);
+            }
+        
+            
+            $stmt->execute();
+            $result = $stmt->get_result();
+        
+            
+            return $result;
+        }
+        
+        
+        public function getTotalDataEventTeams($idteam, $keyword_judul = "") {
+           
+            $sql = "SELECT COUNT(*) AS total
+                    FROM 
+                        team t 
+                    INNER JOIN 
+                        event_teams et ON t.idteam = et.idteam 
+                    INNER JOIN 
+                        event e ON et.idevent = e.idevent 
+                    WHERE 
+                        t.idteam = ? AND e.name LIKE ?";
+            
+            
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+        
+            
+            $keyword = "%{$keyword_judul}%";
+            $stmt->bind_param("is", $idteam, $keyword);
+        
+            
+            $stmt->execute();
+            $stmt->bind_result($total);
+            $stmt->fetch();
+        
+           
+            return $total;
+        }
         
 
         public function displayAchievement_Team($idteam) {
@@ -223,6 +299,75 @@
             return $achievements;
         }
         
+        public function getAchievement_Teams($idteam, $keyword_judul = "", $offset = null, $limit = null) {
+            
+            $sql = "SELECT 
+                        a.idachievement as idachievement ,
+                        a.name as name_achievement ,
+                        a.description as deskripsi
+                    FROM 
+                        team t
+                    INNER JOIN
+                        achievement a ON t.idteam = a.idteam 
+                    WHERE 
+                        t.idteam = ? AND a.name LIKE ?";
+        
+            
+            if (!is_null($offset) && !is_null($limit)) {
+                $sql .= " LIMIT ?, ?";
+            }
+        
+            
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+        
+           
+            $keyword = "%{$keyword_judul}%";
+            if (!is_null($offset) && !is_null($limit)) {
+                $stmt->bind_param("isii", $idteam, $keyword, $offset, $limit);
+            } else {
+                $stmt->bind_param("is", $idteam, $keyword);
+            }
+        
+            
+            $stmt->execute();
+            $result = $stmt->get_result();
+        
+            
+            return $result;
+        }
+        
+        
+        public function getTotalDataAchievementTeams($idteam, $keyword_judul = "") {
+           
+            $sql = "SELECT COUNT(*) AS total
+                    FROM 
+                        team t
+                    INNER JOIN
+                        achievement a ON t.idteam = a.idteam 
+                    WHERE 
+                        t.idteam = ? AND a.name LIKE ?";
+            
+            
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+        
+            
+            $keyword = "%{$keyword_judul}%";
+            $stmt->bind_param("is", $idteam, $keyword);
+        
+            
+            $stmt->execute();
+            $stmt->bind_result($total);
+            $stmt->fetch();
+        
+           
+            return $total;
+        }
         
     }
 ?>

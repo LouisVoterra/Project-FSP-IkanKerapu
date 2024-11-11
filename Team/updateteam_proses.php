@@ -18,6 +18,9 @@ if (isset($_POST['idteam'], $_POST['name'], $_POST['idgame'])) {
     ];
 
     $result = $team->updateTeam($updateData);
+    
+
+       
 
     if ($result) {
         echo "<script>alert('Team berhasil diperbarui.');</script>";

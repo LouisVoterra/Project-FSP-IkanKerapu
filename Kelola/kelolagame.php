@@ -3,7 +3,7 @@
 ?>
 <html>
     <head>
-        <title>Kelola Game</title>
+        <title>Kelola Game Informatics Club</title>
     </head>
     <link rel="stylesheet" href="../style.css">
     <body>
@@ -15,6 +15,7 @@
                 <li><a href="kelolaachievment.php">Kelola Achievement</a></li>
                 <li><a href="kelolaevent.php">Kelola Event</a></li>
                 <li><a href="daftar_proposal.php">Daftar Proposal</a></li>
+                <li><a href="../Portal/logout.php">Logout</a></li>
             </ul>
         </nav>
     </div>

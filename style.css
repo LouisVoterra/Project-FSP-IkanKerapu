@@ -125,3 +125,19 @@ body{
     border: 1px solid #ddd;
     padding: 8px;
 }
+
+#event_table {
+    float:left;
+    margin-right : 510px;
+    width: 30%;
+}
+
+#achievement_table {
+    float:left;
+    width: 30%;
+}
+
+#view_event_details {
+    float:left;
+    margin-right: 925px;
+}
