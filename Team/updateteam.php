@@ -30,7 +30,7 @@ $games = $objectGame->getGame('');
 
 <h2>Edit Team</h2>
 
-<form action="updateteam_proses.php" method="POST">
+<form action="updateteam_proses.php" method="POST" enctype="multipart/form-data">
     <input type="hidden" name="idteam" value="<?php echo htmlspecialchars($team['idteam']); ?>">
     
     <label for="name">Nama Team:</label>
@@ -40,7 +40,6 @@ $games = $objectGame->getGame('');
     <label for="idgame">Game:</label>
     <select id="idgame" name="idgame" required>
         <?php
-
         if ($games->num_rows > 0) {
             while ($row = $games->fetch_assoc()) {
                 $selected = ($row["idgame"] == $team["idgame"]) ? "selected" : "";
@@ -52,11 +51,20 @@ $games = $objectGame->getGame('');
         ?>
     </select>
     <br><br>
-            <div id="filediv">
-                <div>
-                    <input type="file" name="poster[]" id="poster"/>
-                </div>
-            </div>
+
+    <label for="poster">Gambar Team (Saat ini):</label><br>
+    <?php
+    $currentPoster = "../images/" . $team['idteam'] . ".jpg";
+    if (file_exists($currentPoster)) {
+        echo "<img src='$currentPoster' width='100' alt='Current Poster'><br><br>";
+    } else {
+        echo "No current image.<br><br>";
+    }
+    ?>
+
+    <label for="poster">Upload Gambar Baru:</label>
+    <input type="file" name="poster" id="poster">
+    <small>Hanya file JPG yang diizinkan.</small>
     <br><br>
     
     <input type="submit" value="Update Team">

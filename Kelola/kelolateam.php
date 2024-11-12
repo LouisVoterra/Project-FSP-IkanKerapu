@@ -65,13 +65,18 @@
             // <td>" . htmlspecialchars($row["idteam"]) . "</td>
             while($row = $res->fetch_assoc()) {
 
-                $namaposter = $row["idteam"];
-                if(!file_exists("images/".$namaposter)) {
-                    $namaposter = "blank.jpg";
-                }
+                $namaposter = "../images/" . $row["idteam"] . ".jpg";
+        
+        // Cek jika gambar tidak ditemukan, cari dengan ekstensi lain (misalnya .png), atau gunakan gambar default
+        if (!file_exists($namaposter)) {
+            $namaposter = "../images/" . $row["idteam"] . ".png";
+            if (!file_exists($namaposter)) {
+                $namaposter = "../images/blank.jpg"; // Gambar default jika tidak ditemukan
+            }
+        }
 
                 echo "<tr>
-                        <td><img class='poster' src='images/".$namaposter."'/><br>".htmlspecialchars($row["idteam"])."</td>
+                        <td><img class='poster' src='../images/".$namaposter."' width='100'/><br>".htmlspecialchars($row["idteam"])."</td>
                        
                         <td>" . htmlspecialchars($row["team_name"]) . "</td>
                         <td>" . htmlspecialchars($row["game_name"]) . "</td>

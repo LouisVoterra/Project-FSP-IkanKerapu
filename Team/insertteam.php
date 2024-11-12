@@ -38,7 +38,7 @@ $result = $team->getGame('');
     </select>
     <br><br>
         <div>
-            <input type="file" name="poster[]" id="poster"/>
+            <input type="file" name="poster" id="poster"/>
         </div>
     <br><br>
     

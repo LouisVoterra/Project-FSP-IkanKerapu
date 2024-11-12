@@ -17,21 +17,38 @@ if (isset($_POST['idteam'], $_POST['name'], $_POST['idgame'])) {
         'idgame' => $idgame
     ];
 
-    $result = $team->updateTeam($updateData);
-    
+    if (isset($_FILES["poster"]) && $_FILES["poster"]["error"] == 0) {
+        $target_dir = "../images/";
+        $newPosterPath = $target_dir . $idteam . ".jpg";
 
-       
+        // Hanya izinkan file dengan ekstensi JPG
+        $imageFileType = strtolower(pathinfo($_FILES["poster"]["name"], PATHINFO_EXTENSION));
+        if ($imageFileType != "jpg") {
+            echo "<script>alert('Hanya file JPG yang diizinkan.');</script>";
+            header("Location: updateteam.php?idteam=$idteam");
+            exit();
+        }
 
-    if ($result) {
-        echo "<script>alert('Team berhasil diperbarui.');</script>";
+        // Hapus gambar lama jika ada
+        if (file_exists($newPosterPath)) {
+            unlink($newPosterPath);
+        }
+
+        // Pindahkan file gambar baru
+        if (move_uploaded_file($_FILES["poster"]["tmp_name"], $newPosterPath)) {
+            echo "<script>alert('Data and image updated successfully');</script>";
+            header("Location: ../Kelola/kelolateam.php");
+        } else {
+            echo "<script>alert('Data updated, but image upload failed');</script>";
+            header("Location: updateteam.php?idteam=$idteam");
+        }
+    } elseif ($updateData) {
+        echo "<script>alert('Data updated successfully');</script>";
+        header("Location: ../Kelola/kelolateam.php");
     } else {
-        echo "<script>alert('Error: Gagal memperbarui tim.');</script>";
+        echo "<script>alert('Data update failed');</script>";
+        header("Location: updateteam.php?idteam=$idteam");
     }
-
-    header("Location: ../Kelola/kelolateam.php");
-    exit();
-} else {
-    echo "Form data is incomplete.";
 }
 
 ?>
