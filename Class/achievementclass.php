@@ -28,6 +28,8 @@ class Achievement extends DBParent {
         $stmt->execute();
         $result = $stmt->get_result();
         return $result;
+
+        
     }
 
     public function getTotalData($keyword_judul) {

@@ -5,13 +5,14 @@ require_once("../Class/teamclass.php");
 
 if (isset($_GET['idachievement'])) {
     $idachievement = $_GET['idachievement'];
+    
 
     
     $achievementObj = new Achievement();
     $teamObj = new Team();
 
     
-    $achievement = $achievementObj->getAchievement($idachievement); 
+    $achievement = $achievementObj->getAchievementById($idachievement); 
     if (!$achievement) {
         echo "Achievement not found.";
         exit();

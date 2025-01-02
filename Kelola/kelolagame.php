@@ -19,12 +19,12 @@
             </ul>
         </nav>
     </div>
-        <h1>Kelola Game</h1>
+        <h1 class="judul_kelola">Kelola Game</h1>
         <div id="kanan">
             <a href="../Game/insertgame.php">Tambah Game</a><br><br>
             <form method="get" action="kelolagame.php">
                 <label for="judul">Masukkan Judul:</label>
-                <input type="text" id="name" name="name"
+                <input type="text" placeholder="Search.." id="name" name="name"
                        value="<?php echo @$_GET["name"]; ?>" >
                 <input type="submit" value="Submit" name="btnSubmit">
                 <a href="kelolagame.php">Reset</a>
