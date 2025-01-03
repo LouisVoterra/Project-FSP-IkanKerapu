@@ -15,6 +15,10 @@ if(isset($_POST["btnLogin"])) {
         $_SESSION['username'] = $username;
         $_SESSION['profile'] = $loginUser['profile'];
         $_SESSION['proposal_status'] = $loginUser['proposal_status'];
+        $_SESSION['id_member'] = $loginUser['id_member'];
+        $_SESSION['id_team'] = $loginUser['id_team'];
+        $_SESSION['nama'] = $loginUser['nama'];
+
         header("Location: ../index.php");
         exit();
     } 

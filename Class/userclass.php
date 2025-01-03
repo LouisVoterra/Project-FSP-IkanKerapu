@@ -8,13 +8,17 @@
         
         public function LoginUser($username, $password) {
             $sql = "SELECT 
-                        m.*, p.status
+                        CONCAT(m.fname, ' ', m.lname) AS name ,m.*, p.status, t.idteam
                      FROM 
                         member m
                     INNER JOIN 
                         join_proposal p 
                     ON
                         m.idmember = p.idmember 
+                    INNER JOIN 
+                        team t 
+                    ON
+                        p.idteam = t.idteam
                     WHERE 
                         m.username = ?
                     AND
@@ -31,8 +35,11 @@
                 if(password_verify($password, $row['password'])) {
                     return [
                         'status' => true,
+                        'nama' => $row['name'],
                         'profile' => $row['profile'],
-                        'proposal_status' => $row['status']
+                        'proposal_status' => $row['status'],
+                        'id_member' => $row['idmember'],
+                        'id_team' => $row['idteam']
                     ];
                 } else {
                     return false;

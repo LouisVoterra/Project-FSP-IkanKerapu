@@ -1,32 +1,25 @@
 <?php
 require_once("../Class/gameclass.php");
-require_once("../Class/teamclass.php"); 
+require_once("../Class/teamclass.php");
 
 session_start();
-$loggedInUser = isset($_SESSION['username']) ? $_SESSION['username'] : '';
-
+$nama = $_SESSION['nama'];
+$idteam = $_SESSION['id_team'];
 $team = new Team();
-$teams = $team->getAllTeams(); 
+
+// Mengambil tim berdasarkan username yang login
+$teams = $team->getTeamById($idteam);
 
 $members = [];
 $achievements = [];
 $events = [];
 
-// Mendapatkan anggota tim dan achievement berdasarkan ID tim yang dipilih
-if (isset($_POST['idteam']) && !empty($_POST['idteam'])) {
-    $idteam = $_POST['idteam'];
+// Mendapatkan anggota tim dan achievement berdasarkan ID tim
+if (!empty($teams)) {
+    $idteam = $teams; // Asumsikan data tim memiliki key 'id'
     $members = $team->displayTeam_Member($idteam);
-    $achievements = $team->displayAchievement_Team($idteam); // Ambil achievement tim
-    $events = $team->displayEvent_Team($idteam); 
-}
-
-$game = new Game();
-$games = $game->getGame('');
-
-// Mendapatkan tim berdasarkan ID game yang dipilih
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idgame']) && !empty($_POST['idgame'])) {
-    $idgame = $_POST['idgame'];
-    $teams = $team->getTeamsByGameId($idgame); 
+    $achievements = $team->displayAchievement_Team($idteam);
+    $events = $team->displayEvent_Team($idteam);
 }
 ?>
 
@@ -42,40 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idgame']) && !empty($
     <div class="position">
         <nav class="navigation">
             <ul>
-                <li><a href="../team/daftarteam.php">Daftar Team</a></li>
+                <li><a href="../index.php">Halaman Utama</a></li>
                 <li><a href="../Member/applyteam.php">Apply Team</a></li>
                 <li><a href="../Team/displayteam.php">Lihat Team</a></li>
                 <li><a href="../Portal/logout.php">Logout</a></li>
             </ul>
         </nav>
     </div>
-
-    <!-- Form untuk memilih game -->
-    <form method="POST" action="">
-        <label for="select_game">Pilih Game:</label>
-        <select id="select_game" name="idgame" onchange="this.form.submit()">
-            <option value="">Pilih Game</option>
-            <?php while ($row = $games->fetch_assoc()): ?>
-                <option value="<?= htmlspecialchars($row['idgame']) ?>" <?= (isset($_POST['idgame']) && $_POST['idgame'] === $row['idgame']) ? 'selected' : '' ?>>
-                    <?= htmlspecialchars($row['name']) ?>
-                </option>
-            <?php endwhile; ?>
-        </select>
-    </form>
-
-    <?php if (!empty($teams)): ?>
-        <form method="POST" action="">
-            <label for="select_team">Pilih Team:</label>
-            <select id="select_team" name="idteam" onchange="this.form.submit()">
-                <option value="">Pilih Team</option>
-                <?php foreach ($teams as $team): ?>
-                    <option value="<?= htmlspecialchars($team['idteam']) ?>" <?= (isset($_POST['idteam']) && $_POST['idteam'] === $team['idteam']) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($team['team_name']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </form>
-    <?php endif; ?>
 
     <!-- Tampilkan anggota tim jika ada -->
     <?php if (!empty($members)): ?>
@@ -88,23 +54,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idgame']) && !empty($
                 </tr>
             </thead>
             <tbody>
-            <?php foreach ($members as $member): ?>
-        <?php 
-        $namaMember = $member['nama'];
-        if ($namaMember === $loggedInUser) {
-            $namaMember .= " (saya)";
-        }
-        ?>
-        <tr>
-            <td><?= htmlspecialchars($namaMember) ?></td>
-            <td><?= htmlspecialchars($member['team_name']) ?></td>
-        </tr>
-    <?php endforeach; ?>
-</tbody>
+                <?php foreach ($members as $member): ?>
+                    <?php 
+
+                    
+                    
+                    $namaMember = $member['nama'];
+                    if (strcasecmp($namaMember, $nama) == 0) { // Membandingkan tanpa memperhatikan huruf besar/kecil
+                        $namaMember .= " (saya)";
+                    }
+                    ?>
+                    <tr>
+                        <td><?= htmlspecialchars($namaMember) ?></td>
+                        <td><?= htmlspecialchars($member['team_name']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
         </table>
-    <?php elseif (isset($_POST['idteam']) && empty($members)): ?>
+    <?php else: ?>
         <p>Tim ini tidak memiliki anggota.</p>
     <?php endif; ?>
+
+    <br><br>
 
     <!-- Tampilkan achievement jika ada -->
     <?php if (!empty($achievements)): ?>
@@ -131,11 +102,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idgame']) && !empty($
                 <?php endforeach; ?>
             </tbody>
         </table>
-    <?php elseif (isset($_POST['idteam']) && empty($achievements)): ?>
+    <?php else: ?>
         <p>Tim ini belum memiliki prestasi.</p>
     <?php endif; ?>
- <!-- Tampilkan event jika ada -->
- <?php if (!empty($events)): ?>
+
+    <br><br>
+
+    <!-- Tampilkan event jika ada -->
+    <?php if (!empty($events)): ?>
         <h2>Event yang Diikuti Tim</h2>
         <table>
             <thead>
@@ -159,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idgame']) && !empty($
                 <?php endforeach; ?>
             </tbody>
         </table>
-    <?php elseif (isset($_POST['idteam']) && empty($events)): ?>
+    <?php else: ?>
         <p>Tim ini belum mengikuti event apa pun.</p>
     <?php endif; ?>
 </body>

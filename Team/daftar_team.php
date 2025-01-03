@@ -9,7 +9,7 @@ $gameId = isset($_GET['idgame']) ? (int) $_GET['idgame'] : null;
 $team = new Team();
 $result = $team->getTeamsByGameId($gameId);
 
-$game = new Game();
+$game = new Game(); 
 $resultgame = $game->getGame('');
 ?>
 <!DOCTYPE html>

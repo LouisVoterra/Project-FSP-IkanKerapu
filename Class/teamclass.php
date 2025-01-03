@@ -119,43 +119,7 @@
         }
 
         
-        // public function getGamesByTeamId($idTeam) {
-        //     // Query untuk mendapatkan daftar game berdasarkan ID tim
-        //     $sql = "SELECT g.idgame, g.name, t.name as team_name
-        //     FROM game g
-        //     INNER JOIN team t ON t.idgame = g.idgame
-        //     WHERE t.idteam = ?";
-            
-        //     // Persiapkan statement
-        //     $stmt = $this->mysqli->prepare($sql);
-        //     if ($stmt === false) {
-        //         die("Error preparing statement: " . $this->mysqli->error);
-        //     }
-            
-        //     // Bind parameter untuk mengikat idTeam
-        //     $stmt->bind_param("i", $idTeam);
-        //     $stmt->execute();
-            
-        //     // Ambil hasilnya
-        //     $result = $stmt->get_result();
-            
-        //     // Membuat array untuk menyimpan data game
-        //     $games = [];
-            
-        //     // Jika ada data, masukkan ke dalam array
-        //     while ($row = $result->fetch_assoc()) {
-        //         $games[] = $row;
-        //     }
-            
-        //     // Tutup statement
-        //     $stmt->close();
-            
-        //     // Mengembalikan array game
-        //     return $games;
-        // }
-        
-        
-        
+    
 
         public function deleteTeam($arr_col) {
             $sql = "DELETE FROM team WHERE idteam = ?";
