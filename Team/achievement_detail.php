@@ -28,7 +28,7 @@ $idTeam = isset($_GET['idteam']) ? $_GET['idteam'] : null;
                 $offset = 0;
             }
 
-            // Ambil data event yang terkait dengan tim
+           
             $res = $eventObj->getAchievement_Teams($idTeam, "", $offset, $perhalaman);
             $totaldata = $eventObj->getTotalDataAchievementTeams($idTeam, "");
 

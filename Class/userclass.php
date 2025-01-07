@@ -6,63 +6,22 @@
             parent::__construct();
         }
         
-        public function LoginUser($username, $password) {
-            $sql = "SELECT 
-                        CONCAT(m.fname, ' ', m.lname) AS name ,m.*, p.status, t.idteam
-                     FROM 
-                        member m
-                    INNER JOIN 
-                        join_proposal p 
-                    ON
-                        m.idmember = p.idmember 
-                    INNER JOIN 
-                        team t 
-                    ON
-                        p.idteam = t.idteam
-                    WHERE 
-                        m.username = ?
-                    AND
-                        p.status IN ('waiting','approved','rejected') ";
-            $stmt = $this->mysqli->prepare($sql);
-           
-            $stmt->bind_param("s", $username,);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if($result->num_rows > 0) {
-                // cek password
-                $row = $result->fetch_assoc();
-                if(password_verify($password, $row['password'])) {
-                    return [
-                        'status' => true,
-                        'nama' => $row['name'],
-                        'profile' => $row['profile'],
-                        'proposal_status' => $row['status'],
-                        'id_member' => $row['idmember'],
-                        'id_team' => $row['idteam']
-                    ];
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
-
-        public function LoginAdmin($username, $password) {
+        public function Login($username, $password) {
+            
             $sql = "SELECT * FROM member WHERE username = ?";
             $stmt = $this->mysqli->prepare($sql);
-            $stmt->bind_param("s", $username,);
+            $stmt->bind_param("s", $username);
             $stmt->execute();
             $result = $stmt->get_result();
-
-            if($result->num_rows > 0) {
-                // cek password
+        
+            if ($result->num_rows > 0) {
+                
                 $row = $result->fetch_assoc();
-                if(password_verify($password, $row['password'])) {
+                if (password_verify($password, $row['password'])) {
                     return [
                         'status' => true,
-                        'profile' => $row['profile']
+                        'profile' => $row['profile'],
+                        'idmember' => $row['idmember'] 
                     ];
                 } else {
                     return false;
@@ -71,6 +30,9 @@
                 return false;
             }
         }
+        
+
+        
 
         public function Registrasi($arr_col) {
             $sql = "INSERT INTO member(fname, lname,username, password,profile) 

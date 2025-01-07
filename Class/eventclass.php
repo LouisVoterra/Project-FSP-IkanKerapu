@@ -161,30 +161,7 @@
             return $teamsInEvent;
         }
 
-        // public function get_event_teams($idteam){
-        //     $sql = "SELECT e.idevent AS event_id, t.name AS team_name, e.name AS event_name, e.description AS event_description, e.date AS event_date
-        //             FROM team t 
-        //             INNER JOIN event_teams et ON t.idteam = et.idteam 
-        //             INNER JOIN event e ON et.idevent = e.idevent
-        //             WHERE t.idteam = ?";
-                    
-        //     $stmt = $this->mysqli->prepare($sql);
-        //     if ($stmt === false) {
-        //         die("Error preparing statement: " . $this->mysqli->error);
-        //     }
-            
-        //     $stmt->bind_param("i", $idteam);  
-        //     $stmt->execute();
-            
-        //     $result = $stmt->get_result(); 
-        //     // $events = [];
-        //     // while ($event = $result->fetch_assoc()) {
-        //     //     $events[] = $event;
-        //     // }
         
-        //     $stmt->close();
-        //     return $result;
-        // }
         
         
         

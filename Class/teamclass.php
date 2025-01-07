@@ -7,18 +7,18 @@
             parent::__construct();
         }
 
-        public function getTeam($keyword_judul, $offset=null,$limit = null) {
-            $sql = "SELECT t.idteam, g.name as game_name, t.name as team_name FROM team t 
+        public function getTeam($keyword_judul, $offset = null, $limit = null) {
+            $sql = "SELECT t.idteam, g.name as game_name, t.name as team_name 
+                    FROM team t 
                     INNER JOIN game g ON t.idgame = g.idgame
                     WHERE t.name LIKE ?";
-            if(!is_null($offset)) {
-                $sql.= " LIMIT ?,?";
+            if (!is_null($offset) && !is_null($limit)) {
+                $sql .= " LIMIT ?, ?";
             }
-
-
+        
             $stmt = $this->mysqli->prepare($sql);
             $keyword = "%{$keyword_judul}%";            
-            if(!is_null($offset)) {
+            if (!is_null($offset) && !is_null($limit)) {
                 $stmt->bind_param("sii", $keyword, $offset, $limit);
             } else {
                 $stmt->bind_param("s", $keyword);
@@ -82,44 +82,26 @@
             return $teams;
         }
         public function getTeamsByGameId($gameId) {
-            // Query untuk mengambil tim berdasarkan ID game
+            
             $sql = "SELECT t.idteam, t.name AS team_name, g.name AS game_name
                     FROM team t
                     INNER JOIN game g ON t.idgame = g.idgame
                     WHERE t.idgame = ?";
         
-            // Persiapkan statement
             $stmt = $this->mysqli->prepare($sql);
             if ($stmt === false) {
                 die("Error preparing statement: " . $this->mysqli->error);
             }
-        
-            // Bind parameter untuk mengikat ID game
             $stmt->bind_param("i", $gameId);
-        
-            // Eksekusi query
             $stmt->execute();
-            
-            // Ambil hasilnya
             $result = $stmt->get_result();
-            
-            // Membuat array untuk menyimpan data tim
             $teams = [];
-            
-            // Jika ada data tim, masukkan ke dalam array
             while ($row = $result->fetch_assoc()) {
                 $teams[] = $row;
             }
-        
-            // Tutup statement
             $stmt->close();
-        
-            // Mengembalikan array tim
             return $teams;
         }
-
-        
-    
 
         public function deleteTeam($arr_col) {
             $sql = "DELETE FROM team WHERE idteam = ?";
@@ -136,23 +118,26 @@
             }
         }
 
-        public function displayTeam_Member($id) {
+        public function displayTeam_Member($idteam, $offset = 0, $limit = 10) {
             $sql = "SELECT 
-                        CONCAT(m.fname,' ',m.lname) as nama, 
-                        t.name as team_name 
+                        m.idmember, 
+                        CONCAT(m.fname, ' ', m.lname) AS nama, 
+                        t.name AS team_name 
                     FROM member m 
                     INNER JOIN team_members tm ON m.idmember = tm.idmember 
-                    INNER JOIN team t ON tm.idteam = t.idteam
-                    WHERE t.idteam = ?";
+                    INNER JOIN team t ON tm.idteam = t.idteam 
+                    WHERE tm.idteam = ? 
+                    LIMIT ?, ?";
+            
             $stmt = $this->mysqli->prepare($sql);
             if ($stmt === false) {
                 die("Error preparing statement: " . $this->mysqli->error);
             }
-            
-            $stmt->bind_param("i", $id);  
+        
+            $stmt->bind_param("iii", $idteam, $offset, $limit);
             $stmt->execute();
-            
-            $result = $stmt->get_result(); 
+        
+            $result = $stmt->get_result();
             $members = [];
             while ($row = $result->fetch_assoc()) {
                 $members[] = $row;
@@ -161,6 +146,7 @@
             $stmt->close();
             return $members;
         }
+        
         public function getMembersByGameAndTeam($idteam, $game_selected) {
             $sql = "SELECT CONCAT(m.fname, ' ', m.lname) AS name 
                     FROM member m
@@ -188,9 +174,7 @@
             return $members;
         }
         
-        
-
-        public function displayEvent_Team($idteam) {
+        public function displayEvent_Team($idmember, $offset = 0, $limit = 10) {
             $sql = "SELECT 
                         e.idevent as id, 
                         e.name AS name,
@@ -199,16 +183,19 @@
                     FROM 
                         event e
                     INNER JOIN 
-                        event_teams et ON 
-                        e.idevent = et.idevent
+                        event_teams et ON e.idevent = et.idevent
+                    INNER JOIN 
+                        team_members tm ON et.idteam = tm.idteam
                     WHERE 
-                        et.idteam = ?";
+                        tm.idteam = ? 
+                    LIMIT ?, ?";
+        
             $stmt = $this->mysqli->prepare($sql);
             if ($stmt === false) {
                 die("Error preparing statement: " . $this->mysqli->error);
             }
         
-            $stmt->bind_param("i", $idteam);
+            $stmt->bind_param("iii", $idmember, $offset, $limit);
             $stmt->execute();
         
             $result = $stmt->get_result(); 
@@ -220,7 +207,7 @@
             $stmt->close();
             return $events;
         }
-
+    
         public function getEvent_Teams($idteam, $keyword_judul = "", $offset = null, $limit = null) {
             
             $sql = "SELECT 
@@ -297,25 +284,25 @@
         }
         
 
-        public function displayAchievement_Team($idteam) {
+        public function displayAchievement_Team($idmember, $offset = 0, $limit = 10) {
             $sql = "SELECT DISTINCT
-                        a.idachievement as id ,a.name as name, a.description as description, a.date as date 
+                        a.idachievement as id, a.name as name, a.description as description, a.date as date 
                     FROM 
                         team t
                     INNER JOIN
                         achievement a ON t.idteam = a.idteam
-                    INNER JOIN 
-                        event_teams et ON t.idteam = et.idteam
-                    INNER JOIN 
-                        event e ON et.idevent = e.idevent
+                    INNER JOIN
+                        team_members tm ON t.idteam = tm.idteam
                     WHERE 
-                        t.idteam = ?";
+                        tm.idteam = ? 
+                    LIMIT ?, ?";
+        
             $stmt = $this->mysqli->prepare($sql);
             if ($stmt === false) {
                 die("Error preparing statement: " . $this->mysqli->error);
             }
         
-            $stmt->bind_param("i", $idteam);  
+            $stmt->bind_param("iii", $idmember, $offset, $limit);  
             $stmt->execute();
         
             $result = $stmt->get_result(); 
@@ -327,6 +314,8 @@
             $stmt->close();
             return $achievements;
         }
+        
+        
         
         public function getAchievement_Teams($idteam, $keyword_judul = "", $offset = null, $limit = null) {
             
@@ -369,30 +358,18 @@
         }
         
         public function getTeamById($id) {
-            // Query untuk mendapatkan detail tim berdasarkan ID tim
+            
             $sql = "SELECT * FROM team WHERE idteam = ?";
-        
-            // Persiapkan statement menggunakan $this->mysqli
+            
             $stmt = $this->mysqli->prepare($sql);
-        
             if ($stmt === false) {
                 die("Error preparing statement: " . $this->mysqli->error);
             }
-        
-            // Mengikat parameter ID tim
             $stmt->bind_param("i", $id);  
             $stmt->execute();
-        
-            // Ambil hasilnya
             $result = $stmt->get_result(); 
-        
-            // Ambil data tim sebagai array asosiasi
             $team = $result->fetch_assoc();
-        
-            // Tutup statement
             $stmt->close();
-        
-            // Mengembalikan data tim
             return $team;  
         }
         
@@ -425,6 +402,88 @@
            
             return $total;
         }
+        public function getTotalDataMembers($idteam) {
+            $sql = "SELECT COUNT(*) AS total
+                    FROM member m
+                    INNER JOIN team_members tm ON m.idmember = tm.idmember
+                    INNER JOIN team t ON tm.idteam = t.idteam
+                    WHERE t.idteam = ?";
+            
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+        
+            $stmt->bind_param("i", $idteam);
+            $stmt->execute();
+            $stmt->bind_result($total);
+            $stmt->fetch();
+            
+            $stmt->close();
+            return $total;
+        }
+        
+        public function getTotalDataAchievements($idteam) {
+            $sql = "SELECT COUNT(*) AS total
+                    FROM achievement a
+                    INNER JOIN team t ON a.idteam = t.idteam
+                    WHERE t.idteam = ?";
+            
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+        
+            $stmt->bind_param("i", $idteam);
+            $stmt->execute();
+            $stmt->bind_result($total);
+            $stmt->fetch();
+            
+            $stmt->close();
+            return $total;
+        }
+        
+        public function getTotalDataEvents($idteam) {
+            $sql = "SELECT COUNT(*) AS total
+                    FROM event e
+                    INNER JOIN event_teams et ON e.idevent = et.idevent
+                    WHERE et.idteam = ?";
+            
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+        
+            $stmt->bind_param("i", $idteam);
+            $stmt->execute();
+            $stmt->bind_result($total);
+            $stmt->fetch();
+            
+            $stmt->close();
+            return $total;
+        }
+
+        public function getTeamByIdMember($idmember) {
+            $sql = "SELECT t.idteam 
+                    FROM team t 
+                    INNER JOIN team_members tm ON t.idteam = tm.idteam 
+                    WHERE tm.idmember = ? LIMIT 1";
+            
+            $stmt = $this->mysqli->prepare($sql);
+            if ($stmt === false) {
+                die("Error preparing statement: " . $this->mysqli->error);
+            }
+        
+            $stmt->bind_param("i", $idmember);
+            $stmt->execute();
+        
+            $result = $stmt->get_result();
+            $team = $result->fetch_assoc();
+        
+            $stmt->close();
+            return $team; 
+        }
         
     }
+    
 ?>

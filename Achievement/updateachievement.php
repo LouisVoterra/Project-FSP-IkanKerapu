@@ -5,23 +5,18 @@ require_once("../Class/teamclass.php");
 
 if (isset($_GET['idachievement'])) {
     $idachievement = $_GET['idachievement'];
-    
 
-    
     $achievementObj = new Achievement();
     $teamObj = new Team();
 
-    
     $achievement = $achievementObj->getAchievementById($idachievement); 
     if (!$achievement) {
         echo "Achievement not found.";
         exit();
     }
 
-    
     $allTeams = $teamObj->getAllTeams();
 
-   
     $relatedTeams = $achievementObj->getTeamsForAchievement($idachievement);
     $relatedTeamIds = array_column($relatedTeams, 'idteam'); 
 } else {
@@ -57,12 +52,15 @@ if (isset($_GET['idachievement'])) {
     <br><br>
     
     <label for="idteam">Pilih Tim yang Terkait dengan Achievement Ini:</label><br>
-    <?php 
-    foreach($allTeams as $team) {
-        $isChecked = in_array($team['idteam'], $relatedTeamIds) ? "checked" : "";
-        echo "<input type='checkbox' name='idteam[]' value='".htmlspecialchars($team['idteam'])."' $isChecked> ".htmlspecialchars($team['name'])."<br>";
-    }
-    ?>
+    <select name="idteam" id="idteam" required>
+        <option value="" disabled selected>Pilih Tim</option>
+        <?php 
+        foreach($allTeams as $team) {
+            $isSelected = in_array($team['idteam'], $relatedTeamIds) ? "selected" : "";
+            echo "<option value='".htmlspecialchars($team['idteam'])."' $isSelected>".htmlspecialchars($team['name'])."</option>";
+        }
+        ?>
+    </select>
     <br><br>
     
     <input type="submit" value="Update Achievement" name="submit">

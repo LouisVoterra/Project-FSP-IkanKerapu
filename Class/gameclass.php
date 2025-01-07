@@ -78,7 +78,7 @@
         
 
         public function deleteGame($arr_col) {
-            // Prepare the DELETE statement
+            
             $sql = "DELETE FROM game WHERE idgame = ?";
             $stmt = $this->mysqli->prepare($sql);
             if ($stmt === false) {

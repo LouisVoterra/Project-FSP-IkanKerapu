@@ -30,7 +30,7 @@ $idmember = $object->idUser($username);
 <div class="position">
             <nav class="navigation">
                 <ul>
-                    <li><a href="../index.php">Halaman Utama</a></li>
+                    <li><a href="../utama.php">Halaman Utama</a></li>
                     <li><a href="../Member/applyteam.php">Apply Team</a></li>
                     <li><a href="../Team/displayteam.php">Lihat Team</a></li>
                     <li><a href="../Portal/logout.php">Logout</a></li>

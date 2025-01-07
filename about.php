@@ -40,17 +40,17 @@ $result = $game->getGame('');
                     </form>
                 </li>
                 <li><a href="about.php">Tentang</a></li>
-                <li><a href="utama.php">Utama</a></li>
             </ul>
         </nav>
     </div>  
     <header>
-        <h1>Selamat Datang di Ikan Kerapu Esport!</h1>
-        <p>Ikan Kerapu Esport merupakan organisasi Esport yang sudah lama berdiri sejak tahun 2010.</p>
+        
+        
     </header>
 
-    <section id="sejarah">
+    <section class="portal" id="sejarah">
         <h2>Sejarah Kami</h2>
+        <p>Ikan Kerapu Esport merupakan organisasi Esport yang sudah lama berdiri sejak tahun 2010.</p>
         <p>Didirikan oleh sekelompok gamer yang berdedikasi, Ikan Kerapu Esport berawal dari sebuah komunitas kecil di kota pesisir. Seiring waktu, organisasi ini berkembang menjadi salah satu tim Esport paling kompetitif di tanah air.</p>
     </section>
 

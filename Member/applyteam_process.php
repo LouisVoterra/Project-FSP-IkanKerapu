@@ -26,7 +26,7 @@ if(isset($_POST['submit'])){
 
     if ($sql) {
         echo "<script>alert('Data inserted');</script>";
-        header("Location: ../index.php");
+        header("Location: ../utama.php");
     } else {
         echo "<script>alert('Data not inserted');</script>";
         header("Location:  insertteam.php");

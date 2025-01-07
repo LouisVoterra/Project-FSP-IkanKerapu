@@ -19,3 +19,5 @@ if (isset($_POST['btnSubmit'])) {
     header("Location: registration.php");
     exit();
 }
+
+?>
