@@ -9,10 +9,10 @@ if (isset($_GET['idteam'])) {
 
     if ($object->deleteTeam($arr_col)) {
 
-        header("Location: kelolateam.php?status=success");
+        header("Location: ../Kelola/kelolateam.php?status=success");
     } else {
         
-        header("Location: kelolateam.php?status=error");
+        header("Location: ../Kelola/kelolateam.php?status=error");
     }
 } else {
     echo "ID team tidak ditemukan.";

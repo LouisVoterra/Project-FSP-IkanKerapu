@@ -84,7 +84,7 @@ $resultgame = $game->getGame('');
                 </form>
             </li>
             <li><a href="../about.php">Tentang</a></li>
-            <li><a href="../utama.php">Utama</a></li>
+            <li><a href="../index.php">Utama</a></li>
         </ul>
     </nav>
 </div>
